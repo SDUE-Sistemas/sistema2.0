@@ -1,0 +1,45 @@
+    
+h1{font-family:Gotham-Book;}
+p{font-family:Gotham-Book;}
+label{font-family:Gotham-Book;}
+a{font-family:Gotham-Book;}
+ul{font-family:Gotham-Book;}
+li{font-family:Gotham-Book;}
+input{font-family:Gotham-Book;}
+select{font-family:Gotham-Book;}
+/* menu */
+div.scrollmenu {
+    background-color:darkgrey;
+    overflow: auto;
+    white-space: nowrap;
+}
+
+div.scrollmenu a {
+    display: inline-block;
+    color: black;
+    text-align: center;
+    padding: 14px;
+    text-decoration: none;
+}
+
+div.scrollmenu a:hover {
+    background-color:white;
+}
+
+ul, ol {		
+	list-style:none;
+}
+			
+.nav li a {
+	display:block;
+    background-color:darkgrey;
+}
+						
+.nav li ul {
+	display:none;
+	position:absolute;
+}
+			
+.nav li:hover > ul {
+	display:block;  
+}
