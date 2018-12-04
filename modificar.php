@@ -1,12 +1,3 @@
-<!--sacar el ultimo folio con php-->
-<?php
-    include_once('librerias/info.php');
-    $query = "SELECT folio FROM reportes WHERE folio = (SELECT max(folio) FROM reportes)";
-    $statement = $db->prepare($query);
-    $statement->execute();
-    $folio_max = $statement->fetch();
-    $statement->closeCursor();
-?>
 <!-- control de usuarios -->
 <?php if(isset($_COOKIE['usuario']) && isset($_COOKIE['password'])){
   
@@ -23,16 +14,31 @@ if(!($usuario['pass']==$_COOKIE['password'])){
   header('Location: index.php');
 }
 
+    include_once('librerias/info.php');
+    $query = "SELECT folio FROM reportes WHERE folio = (SELECT max(folio) FROM reportes)";
+    $statement = $db->prepare($query);
+    $statement->execute();
+    $folio_max = $statement->fetch();
+    $statement->closeCursor();
+
 //sacar el numero de folios asociados al usuario logeado
 $user=$_COOKIE['usuario'];
-include_once('librerias/info.php');
 
 $query = "SELECT folio FROM reportes WHERE personal_atiende='".$user."' AND estado = 0";
 $statement = $db->prepare($query);
 $statement->execute();
-$nr = $statement->fetchAll();
+$n = $statement->fetchAll();
 $statement->closeCursor();
-$n = sizeof($nr);
+$n = sizeof($n);
+// sacar los datos del reporte que vamos a modificar
+if(isset($_POST['folio'])){
+$x=$_POST['folio'];
+$query = "SELECT folio, asunto, usuario, fecha_levanta, personal_levanta, personal_atiende, area FROM reportes WHERE folio=$x";
+$statement = $db->prepare($query);
+$statement->execute();
+$reporte = $statement->fetch();
+$statement->closeCursor();
+}
 ?>
 <!--html-->
 <!doctype html>
@@ -40,7 +46,7 @@ $n = sizeof($nr);
 <head>
 <!-- Icono -->
     <link rel="icon" type="image/png" href="img/icono.png" />
-    <title>Capturar</title>
+    <title>Modificar</title>
 <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -77,29 +83,39 @@ $n = sizeof($nr);
         <img src="img/Logo Chihuahua.png" alt="" style="height:150px; width:150px" align="right">
 <!-- Nombres -->
         <h1 class="display-6">SECRETARÍA DE DESARROLLO URBANO Y ECOLOGÍA</h1>
-        <p class="lead">AREA DE SISTEMAS / CAPTURAR </p>
+        <p class="lead">AREA DE SISTEMAS / MODIFICAR </p>
     </div>
-<!-- contenido -->
+    <!-- un if que revisa si nos han enviado el folio que nesecitamos para la busqueda -->
+    <?php if(!isset($_POST['folio'])){?>
     <div class="container">
-        <!--empieza el form -->
-    <form action="guardar.php" method="post" id="main">
-        <!-- parte izquierda -->
         <div class="row">
-            
-            <div class="col-md">
-                <label>FOLIO</label>
-                <input style="text-align:center" type="text" class="form-control" value="<?php echo $folio_max['folio']+1;?>" name="folio" disabled>
-                <label>ASUNTO</label>
-                <input type="text" class="form-control" name="asunto" id="asunto" >
-                <label>QUIEN REPORTA</label>
-                <input type="text" class="form-control" name="quien_reporta" id="quien_reporta">
-                <!-- input invisible del la fecha acutual que se va a rellenar con javascript -->
-                <input type="text" id="fecha" name="fecha"hidden>
+            <div align="center" class="col">
+                <form action="modificar.php" method="post">
+                    <input id="folio"  name="folio" placeholder="folio" onkeypress='return event.charCode >= 48 && event.charCode <= 57'/>
+                    <button type="submit" onclick="verificar();">buscar</button>
+                </form>
             </div>
-            <!-- parte derecha -->
-            <div class="col-md">
-
-                <label>DEPARTAMENTO</label>
+        </div>
+    </div>
+    <!-- en caso que lo encuentre le soltamos los datos que puede modificar para que cambie lo que nesecite,
+    además, checamos con un elseif si el folio que nos pasaron está dentro del rango que tenemos. Para esto,
+    vamos a sacar el ultimo folio que tenemos en nuestra base de datos y vamos a hacer la comparacion este
+    cero y el ultimo folio-->
+    
+    <?php }elseif(($folio_max['folio']+1)>$_POST['folio'] && $_POST['folio']>0) { ?>
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <label for="">FOLIO</label>
+                <input type="text" class="form-control" name="folio" value="<?php echo $reporte['folio']; ?>" disabled>
+                <label for="">ASUNTO</label>
+                <input type="text" class="form-control" name="asunto" value="<?php echo $reporte['asunto']; ?>">
+                <label for="">QUIEN REPORTA</label>
+                <input type="text" class="form-control" name="usuario" value="<?php echo $reporte['usuario']; ?>">
+                
+            </div>
+            <div class="col">
+            <label>DEPARTAMENTO</label>
             <!-- Desplegable  Ciclo For DEPARTAMENTOS-->            
             <?php
             $query = "SELECT nombre FROM departamentos";
@@ -111,10 +127,9 @@ $n = sizeof($nr);
                 <!-- Desplegable  Ciclo For DEPARTAMENTOS-->
                 <select class="form-control" name="area" >
                 <?php  foreach($departamentos as $departamento): ?>
-                  <option><?php echo $departamento['nombre'];?></option>
+                  <option <?php if($departamento['nombre']==$reporte['area']){echo "selected";} ?>><?php echo $departamento['nombre'];?></option>
                 <?php endforeach; ?>
                 </select>
-                
                 <label>PERSONAL QUE LEVANTO</label>
                 <!-- Desplegable  Ciclo For QUIEN LEVANTA-->
                 <?php
@@ -127,82 +142,52 @@ $n = sizeof($nr);
                 <!-- Desplegable  Ciclo For QUIEN LEVANTA-->
                 <select class="form-control" name="personal_levanto" >
                 <?php  foreach($personals as $personal): ?>
-                  <option <?php if($usuario['nombre']==$personal['nombre']){echo "selected";} ?>><?php echo $personal['nombre'];?></option>
+                  <option <?php if($reporte['personal_levanta']==$personal['nombre']){echo "selected";} ?>><?php echo $personal['nombre'];?></option>
                 <?php endforeach; ?>
                 </select>
-
                 <label>PERSONAL QUE ATENDERÁ</label>
-                <!-- Desplegable  Ciclo For QUIEN ATIENDE-->
-                <?php
-            $query = "SELECT nombre FROM personal";
-            $statement = $db->prepare($query);
-            $statement->execute();
-            $personals = $statement->fetchALL();
-            $statement->closeCursor();
-            ?>
                 <!-- Desplegable  Ciclo For QUIEN ATIENDE-->
                 <select class="form-control" name="personal_atiende" >
                     <option>DEJAR A CRITERIO DE UN ADMINISTRADOR</option>
                 <?php  foreach($personals as $personal): ?>
-                  <option><?php echo $personal['nombre'];?></option>
+                  <option <?php if($personal['nombre']==$reporte['tecnico_atiende']){echo "selected";} ?>><?php echo $personal['nombre'];?></option>
                 <?php endforeach; ?>
                 </select>
                 <br>
-                <!-- botones -->
-                
             </div>
-            <!-- termina el form -->
-            </form>
         </div>
-        <div class="row" align="center">
-                    
-                    <!-- agregar -->
-                    <div class="col-md" align="right"> 
-                    <button form="main" type="submit" class="btn btn-outline-primary" onclick="validar();">AGREGAR</button>
-                    </div>
-                    <!-- cancelar -->
-                    <div class="col-md" align="left">
-                <input type="button" value="LIMPIAR" onclick="cancelar();" class="btn btn-outline-primary">
-                    </div>
-                </div>
-        <!--termina el container -->
+        <div class="row">
+        <div class="col" align="center">
+        <button type="submit" class="btn btn-outline-primary">GUARDAR</button>
+                <a name="" id="" class="btn btn-primary" href="modificar.php" role="button" onclick="cancelar();">CANCELAR</a> 
     </div>
-
+    </div>
+    </div>
+    <!-- si el folio no esta en el rango permitido madamos un alert y lo redireccionamos -->
+    <?php }else{ ?>
+        <script>
+            alert("folio inexistente");
+            location.href ="modificar.php";
+        </script>
+    <?php } ?>
     <script Language="JavaScript">
-    function chec(){
+    function verificar(){
        //Evento al querer subir un reporte que cheque si esta lleno
-        if(asunto.value=="" &&  quien_reporta.value==""){
+        if(folio.value==""){
            
-            alert("Esta vacio");
-            //funcion para cancelar el envio del form
-        }
-    }
-    function validar(){
-       //Evento al querer subir un reporte que cheque si esta lleno
-        if(asunto.value=="" ||  quien_reporta.value==""){
-           
-            alert("Faltan campos de llenar");
+            alert("Inserte algun valor");
             //funcion para cancelar el envio del form
             event.preventDefault();
-        }
-        else{
-            alert("Guardado");
-            var d = new Date();
-            fecha.value=d.getDate() + "/" + (d.getMonth() +1) + "/" + d.getFullYear();
-            
-        }
-        }
-        //funcion para el boton cancel
+        }}
         function cancelar(){
-        var mensaje = confirm("¿Seguro que deseas borrar?");
+        var mensaje = confirm("¿Seguro que deseas cancelar?");
         //si le da que si le vacia los campos
         if(mensaje){
-            chec();
-            asunto.value = "";
-            quien_reporta.value = "";
+            
+        }else{
+            event.preventDefault();
         }
         }
-    </script>
+        </script>
 </body>
 </html>
-<!-- END -->
