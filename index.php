@@ -1,21 +1,28 @@
+<!-- comprueba si ya estan definidas las cookies de la sesion -->
 <?php if(isset($_COOKIE['usuario']) && isset($_COOKIE['password'])){
 
   include_once('librerias/info.php');
+  //seleccionamos la contraseña según el usuario que ingresó
   $query = "SELECT pass FROM personal WHERE nombre='".$_COOKIE['usuario']."'";
   $statement = $db->prepare($query);
   $statement->execute();
   $usuario = $statement->fetch();
   $statement->closeCursor();
+  //comparamos la contraseña que ingreso el usuario con la que tenemos en la base de datos
   if($usuario['pass']==$_COOKIE['password']){
+    //Si es que es correcta la contraseña lo mandamos a la pagina principal para que empiece a trabajar
     header('Location:capturar.php');
   }else{
+    //si es que la contraseña no coincide le decimos que el usuario o la contraseña estaba mal
       ?>
       <script>alert("Contraseña y/o usuario incorrecta(s)");</script>
       <?php
   }
   }else{
+    //si no estan definidas las cookies de sesion le decimos que inice sesion con un alert
     ?>
     <script>alert("inicie sesion");</script>
+    
     <?php
 }
 ?>
@@ -28,7 +35,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Login</title>
+    <!-- Librerias para toda la family -->
     <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="librerias/estilo.css">
+    <link rel="stylesheet" href="librerias/fuente.css">
 </head>
 <body>
 <div class="jumbotron" style="text-align:center">
@@ -45,7 +55,7 @@
       
     </div>
       <div class="col-md">
-    
+<!-- form del login -->
     <form action="login.php" method="post" style="text-align:center">
     <input name="usuario" id="usuario "type="text" class="form-control" style="text-align:center; width:350px;" placeholder="USUARIO">
     <br><br>

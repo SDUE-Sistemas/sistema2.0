@@ -59,15 +59,15 @@ $n = sizeof($nr);
         <a href="capturar.php">CAPTURAR</a>
         <a href="modificar.php">MODIFICAR REPORTES</a>
 <!-- desplegable de buscar-->
-        <li><a>BUSCAR</a>
+        <!-- <li><a>BUSCAR</a>
           <ul>
 				<li><a href="mfolio.php">POR FOLIO</a></li>
 				<li><a href="musuario.php">POR NOMBRE USUARIO</a></li>
 				<li><a href="mpersonal.php">POR PERSONAL</a></li>
                 <li><a href="marea.php">POR AREA</a></li>          
           </ul>
-        </li>
-        <a href="termrepor.php">TERMINAR MIS REPORTES (<?php echo $n?>)</a>
+        </li> -->
+        <a href="terminar.php">TERMINAR CAPTURAS (<?php echo $n?>)</a>
         </ul>
       </ul>
     </div>
@@ -188,7 +188,7 @@ $n = sizeof($nr);
         else{
             alert("Guardado");
             var d = new Date();
-            fecha.value=d.getDate() + "/" + (d.getMonth() +1) + "/" + d.getFullYear();
+            fecha.value=d.getFullYear() + "" + (d.getMonth() +1) + "" + d.getDate();
             
         }
         }

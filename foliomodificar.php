@@ -1,6 +1,7 @@
- <?php
+<?php
      include_once('librerias/info.php');
-     $query = "SELECT folio FROM reportes WHERE folio = (SELECT max(folio) FROM reportes)";
+     $folio = $_POST['folio'];
+     $query = "SELECT folio FROM reportes WHERE folio LIKE $folio";
      $statement = $db->prepare($query);
      $statement->execute();
      $x = $statement->fetch();

@@ -91,8 +91,10 @@ $statement->closeCursor();
         <div class="row">
             <div align="center" class="col">
                 <form action="modificar.php" method="post">
-                    <input id="folio"  name="folio" placeholder="folio" onkeypress='return event.charCode >= 48 && event.charCode <= 57'/>
-                    <button type="submit" onclick="verificar();">buscar</button>
+                <label>FOLIO</label>
+                    <input class="form-control" id="folio" style="width: 400px"  name="folio" onkeypress='return event.charCode >= 48 && event.charCode <= 57'/>
+                    <br><br>
+                    <button type="submit" class="btn btn-outline-primary" onclick="verificar();">Buscar</button>
                 </form>
             </div>
         </div>
@@ -104,10 +106,12 @@ $statement->closeCursor();
     
     <?php }elseif(($folio_max['folio']+1)>$_POST['folio'] && $_POST['folio']>0) { ?>
     <div class="container">
+    <form action="modificarreporte.php" method="POST" id="main">
         <div class="row">
             <div class="col">
                 <label for="">FOLIO</label>
                 <input type="text" class="form-control" name="folio" value="<?php echo $reporte['folio']; ?>" disabled>
+                <input type="text" class="form-control" name="folio" value="<?php echo $reporte['folio']; ?>" hidden>
                 <label for="">ASUNTO</label>
                 <input type="text" class="form-control" name="asunto" value="<?php echo $reporte['asunto']; ?>">
                 <label for="">QUIEN REPORTA</label>
@@ -150,16 +154,17 @@ $statement->closeCursor();
                 <select class="form-control" name="personal_atiende" >
                     <option>DEJAR A CRITERIO DE UN ADMINISTRADOR</option>
                 <?php  foreach($personals as $personal): ?>
-                  <option <?php if($personal['nombre']==$reporte['tecnico_atiende']){echo "selected";} ?>><?php echo $personal['nombre'];?></option>
+                  <option <?php if($personal['nombre']==$reporte['personal_atiende']){echo "selected";} ?>><?php echo $personal['nombre'];?></option>
                 <?php endforeach; ?>
                 </select>
                 <br>
             </div>
+            </form>
         </div>
         <div class="row">
         <div class="col" align="center">
-        <button type="submit" class="btn btn-outline-primary">GUARDAR</button>
-                <a name="" id="" class="btn btn-primary" href="modificar.php" role="button" onclick="cancelar();">CANCELAR</a> 
+        <button type="submit" class="btn btn-outline-primary" onclick="verificar();" form="main">GUARDAR</button>
+                <a name="" id="" class="btn btn-outline-primary" href="modificar.php" role="button" onclick="cancelar();">CANCELAR</a> 
     </div>
     </div>
     </div>
@@ -173,11 +178,12 @@ $statement->closeCursor();
     <script Language="JavaScript">
     function verificar(){
        //Evento al querer subir un reporte que cheque si esta lleno
-        if(folio.value==""){
-           
-            alert("Inserte algun valor");
+        if(folio.value == ""){
+            alert("Llene los campos");
             //funcion para cancelar el envio del form
             event.preventDefault();
+        }
+        else{
         }}
         function cancelar(){
         var mensaje = confirm("¿Seguro que deseas cancelar?");
