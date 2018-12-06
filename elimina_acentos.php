@@ -61,7 +61,6 @@ function quita_diagonal($cadena_sucia){
         return $cadena_limpia;
 }
 function pon_diagonal($str_sin_diagonal){
-        $longitud=$str_sin_diagonal.length();
         $str_con_diagonal =substr($str_sin_diagonal,0,4);
         $str_con_diagonal .="/";
         $str_con_diagonal .=substr($str_sin_diagonal,4,2);
