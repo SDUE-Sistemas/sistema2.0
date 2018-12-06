@@ -37,7 +37,7 @@
              <img src="img/Logo Chihuahua.png" alt="" style="height:150px; width:150px" align="right">
 <!-- Nombres -->
              <h1 class="display-6">SECRETARÍA DE DESARROLLO URBANO Y ECOLOGÍA</h1>
-             <p class="lead">AREA DE SISTEMAS / BUSCAR </p>
+             <p class="lead">AREA DE SISTEMAS / REPORTE </p>
          </div>
 <!-- Container -->
          <div class="container">

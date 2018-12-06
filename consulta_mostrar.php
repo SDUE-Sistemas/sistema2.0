@@ -1,41 +1,50 @@
 <!--sacar los datos de los reportes que vamos a consultar -->
 <?php
+require_once('librerias/elimina_acentos.php');
 include_once('librerias/info.php');
 $query="SELECT folio, asunto, usuario, fecha_levanta, fecha_atiende, personal_levanta, personal_atiende, area, detalles, causa, estado FROM reportes";
 $ejem="SELECT folio, asunto, usuario, fecha_levanta, fecha_atiende, personal_levanta, personal_atiende, area, detalles, causa, estado FROM reportes";
-if(!empty($_POST['folio'])){
+if(isset($_POST['folio'])){
 
     $query .=" WHERE folio LIKE '".$_POST['folio']."'";
 
-  /*  $statement = $db->prepare($query);
+   $statement = $db->prepare($query);
     $statement->execute();
     $reporte = $statement->fetch();
     $statement->closeCursor();
     $code=1;
-*/
+
 }else{
     
-    if(!empty($_POST['area'])){
+    if(isset($_POST['area'])){
         $query .=" WHERE area LIKE '".$_POST['area']."'";
 
     }
-    if(!empty($_POST['personal'])){
+    if(isset($_POST['personal'])){
         if($query==$ejem){
-            $query .=" WHERE personal LIKE '".$_POST['personal']."'";
+            $query .=" WHERE personal_atiende LIKE '".$_POST['personal']."'";
         }else{
-            $query .=" AND personal LIKE '".$_POST['personal']."'";
+            
+            $query .=" AND personal_atiende LIKE '".$_POST['personal']."'";
         }
 
     }
-    if(!empty($_POST['fecha1'])&&!empty($_POST['fecha2'])){
+    if(isset($_POST['fecha1'])&&!empty($_POST['fecha2'])){
+        $x=$_POST['fecha1'];
+            $x=quita_diagonal($x); 
+            $fecha1=0 + $x;
+            $x=$_POST['fecha2'];
+            $x=quita_diagonal($x); 
+            $fecha2=0 + $x;
         if($query==$ejem){
-            $query .=" WHERE fecha_atiende BETWEEN $_POST['fecha1'] AND $_POST['fecha2']";
+            
+            $query .=" WHERE fecha_atiende BETWEEN '".$fecha1."' AND '".$fecha2."'";
         }else{
-            $query .=" AND fecha_atiende BETWEEN '".$_POST['fecha1']."' AND '".$_POST['fecha2']."'";
+            $query .=" AND fecha_atiende BETWEEN '".$fecha1."' AND '".$fecha2."'";
         }
 
     }
-    if(!empty($_POST['usuario'])){
+    if(isset($_POST['usuario'])){
         if($query==$ejem){
             $query .=" WHERE usuario LIKE '".$_POST['usuario']."'";
         }else{
@@ -43,18 +52,18 @@ if(!empty($_POST['folio'])){
         }
 
     }
-    if(!empty($_POST['causa'])){
+    if(isset($_POST['causa'])){
         if($query==$ejem){
             $query .=" WHERE causa LIKE '".$_POST['causa']."'";
         }else{
             $query .=" AND causa LIKE '".$_POST['causa']."'";
         }
     }
-   /* $statement = $db->prepare($query);
+    $statement = $db->prepare($query);
     $statement->execute();
     $reportes = $statement->fetchAll();
     $statement->closeCursor();
-    $code=0; */
+    $code=0; 
 }   
 ?>
 <!--html-->
@@ -103,20 +112,15 @@ if(!empty($_POST['folio'])){
         <p class="lead">AREA DE SISTEMAS / MODIFICAR </p>
     </div>
     <div class="container">
-    <?php
-    if($code==1){
-
-    }else{
-    foreach ($reportes as $reporte){
-        if($reporte['estado']==1){
-        ?>
-        <div class="row">
+    <?php if($code==1){?>
+<div class="row">
             <div class="col">
+            <!-- si hay folio-->
                 <input value="<?php echo $reporte['folio']; ?>" type="text">
                 <input value="<?php echo $reporte['asunto']; ?>" type="text">
                 <input value="<?php echo $reporte['usuario']; ?>" type="text">
-                <input value="<?php echo $reporte['fecha_levanta']; ?>" type="text">
-                <input value="<?php echo $reporte['fecha_atiende']; ?>" type="text">
+                <input value="<?php echo pon_diagonal($reporte['fecha_levanta']); ?>" type="text">
+                <input value="<?php echo pon_diagonal($reporte['fecha_atiende']); ?>" type="text">
                 <input value="<?php echo $reporte['personal_levanta'];?>" type="text">
                 <input value="<?php echo $reporte['personal_atiende']; ?>" type="text">
                 <input value="<?php echo $reporte['area']; ?>" type="text">
@@ -126,10 +130,30 @@ if(!empty($_POST['folio'])){
             </div>
         </div>
     <?php }else{
-        echo "xd";
+    foreach ($reportes as $reporte){
+       
+        ?>
+        <div class="row">
+            <div class="col">
+            <!-- no hay folio -->
+                <input value="<?php echo $reporte['folio']; ?>" type="text">
+                <input value="<?php echo $reporte['asunto']; ?>" type="text">
+                <input value="<?php echo $reporte['usuario']; ?>" type="text">
+                <input value="<?php echo pon_diagonal($reporte['fecha_levanta']); ?>" type="text">
+                <input value="<?php echo pon_diagonal($reporte['fecha_atiende']); ?>" type="text">
+                <input value="<?php echo $reporte['personal_levanta'];?>" type="text">
+                <input value="<?php echo $reporte['personal_atiende']; ?>" type="text">
+                <input value="<?php echo $reporte['area']; ?>" type="text">
+                <input value="<?php echo $reporte['detalles']; ?>" type="text">
+                <input value="<?php echo $reporte['causa']; ?>" type="text">
+            </div>
+        </div>
+        <?php 
+        }
     }
 
-}} ?>
+ ?>
     </div>
+   
 </body>
 </html>

@@ -110,12 +110,12 @@ $statement->closeCursor();
         <div class="row">
             <div class="col">
                 <label for="">FOLIO</label>
-                <input type="text" class="form-control" name="folio" value="<?php echo $reporte['folio']; ?>" disabled>
+                <input type="text"style="text-align:center" class="form-control" name="folio" value="<?php echo $reporte['folio']; ?>" disabled>
                 <input type="text" class="form-control" name="folio" value="<?php echo $reporte['folio']; ?>" hidden>
                 <label for="">ASUNTO</label>
-                <input type="text" class="form-control" name="asunto" value="<?php echo $reporte['asunto']; ?>">
+                <input type="text" class="form-control" id="asunto" name="asunto" value="<?php echo $reporte['asunto']; ?>">
                 <label for="">QUIEN REPORTA</label>
-                <input type="text" class="form-control" name="usuario" value="<?php echo $reporte['usuario']; ?>">
+                <input type="text" class="form-control" id="usuario" name="usuario" value="<?php echo $reporte['usuario']; ?>">
                 
             </div>
             <div class="col">
@@ -163,7 +163,7 @@ $statement->closeCursor();
         </div>
         <div class="row">
         <div class="col" align="center">
-        <button type="submit" class="btn btn-outline-primary" onclick="verificar();" form="main">GUARDAR</button>
+        <button  class="btn btn-outline-primary" onclick="cambios();" form="main">GUARDAR</button>
                 <a name="" id="" class="btn btn-outline-primary" href="modificar.php" role="button" onclick="cancelar();">CANCELAR</a> 
     </div>
     </div>
@@ -183,9 +183,8 @@ $statement->closeCursor();
             //funcion para cancelar el envio del form
             event.preventDefault();
         }
-        else{
-        }}
-        function cancelar(){
+    }
+    function cancelar(){
         var mensaje = confirm("¿Seguro que deseas cancelar?");
         //si le da que si le vacia los campos
         if(mensaje){
@@ -193,7 +192,13 @@ $statement->closeCursor();
         }else{
             event.preventDefault();
         }
-        }
+    }
+    function cambios(){
+    if(asunto.value=="" || usuario.value==""){
+    alert("Llene todos los campos");
+    event.preventDefault();
+    }
+    }
         </script>
 </body>
 </html>

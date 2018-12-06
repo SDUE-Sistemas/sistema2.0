@@ -11,7 +11,7 @@
 <?php if(isset($_COOKIE['usuario']) && isset($_COOKIE['password'])){
   
   include_once('librerias/info.php');
-  $query = "SELECT pass, nombre FROM personal WHERE nombre='".$_COOKIE['usuario']."'";
+  $query = "SELECT pass, nombre, esadmin FROM personal WHERE nombre='".$_COOKIE['usuario']."'";
   $statement = $db->prepare($query);
   $statement->execute();
   $usuario = $statement->fetch();
@@ -68,6 +68,9 @@ $n = sizeof($nr);
           </ul>
         </li> -->
         <a href="terminar.php">TERMINAR CAPTURAS (<?php echo $n?>)</a>
+        <?php if($usuario['esadmin']==1){ ?>
+        <a href="admin.php">ADMIN</a><?php } ?>
+        <a href="logout.php">SALIR</a>
         </ul>
       </ul>
     </div>
@@ -115,7 +118,7 @@ $n = sizeof($nr);
                 <?php endforeach; ?>
                 </select>
                 
-                <label>PERSONAL QUE LEVANTO</label>
+                <label>PERSONAL QUE LEVANTO EL REPORTE</label>
                 <!-- Desplegable  Ciclo For QUIEN LEVANTA-->
                 <?php
             $query = "SELECT nombre FROM personal";
