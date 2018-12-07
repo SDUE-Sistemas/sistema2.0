@@ -36,11 +36,20 @@ if(isset($_POST['folio'])){
             $x=$_POST['fecha2'];
             $x=quita_diagonal($x); 
             $fecha2=0 + $x;
-        if($query==$ejem){
+
             
+        if($query==$ejem){
+            if($fecha2<$fecha1){
+                $query .=" WHERE fecha_atiende BETWEEN '".$fecha2."' AND '".$fecha1."'";
+            }else{
             $query .=" WHERE fecha_atiende BETWEEN '".$fecha1."' AND '".$fecha2."'";
+            }
         }else{
-            $query .=" AND fecha_atiende BETWEEN '".$fecha1."' AND '".$fecha2."'";
+            if($fecha2<$fecha1){
+                $query .=" AND fecha_atiende BETWEEN '".$fecha2."' AND '".$fecha1."'";   
+            }else{
+                $query .=" AND fecha_atiende BETWEEN '".$fecha1."' AND '".$fecha2."'";
+            }
         }
 
     }
@@ -112,46 +121,83 @@ if(isset($_POST['folio'])){
         <p class="lead">AREA DE SISTEMAS / MODIFICAR </p>
     </div>
     <div class="container">
-    <?php if($code==1){?>
-<div class="row">
-            <div class="col">
-            <!-- si hay folio-->
-                <input value="<?php echo $reporte['folio']; ?>" type="text">
-                <input value="<?php echo $reporte['asunto']; ?>" type="text">
-                <input value="<?php echo $reporte['usuario']; ?>" type="text">
-                <input value="<?php echo pon_diagonal($reporte['fecha_levanta']); ?>" type="text">
-                <input value="<?php echo pon_diagonal($reporte['fecha_atiende']); ?>" type="text">
-                <input value="<?php echo $reporte['personal_levanta'];?>" type="text">
-                <input value="<?php echo $reporte['personal_atiende']; ?>" type="text">
-                <input value="<?php echo $reporte['area']; ?>" type="text">
-                <input value="<?php echo $reporte['detalles']; ?>" type="text">
-                <input value="<?php echo $reporte['causa']; ?>" type="text">
-                <!-- folio, asunto, usuario, fecha_levanta, fecha_atiende, personal_levanta, personal_atiende, area, detalles, causa, estado -->
-            </div>
-        </div>
-    <?php }else{
-    foreach ($reportes as $reporte){
-       
+    <?php
+    
+    if($code==1 && $reporte['estado']==1){
+        if(!empty($reporte)){
         ?>
         <div class="row">
             <div class="col">
-            <!-- no hay folio -->
-                <input value="<?php echo $reporte['folio']; ?>" type="text">
-                <input value="<?php echo $reporte['asunto']; ?>" type="text">
-                <input value="<?php echo $reporte['usuario']; ?>" type="text">
-                <input value="<?php echo pon_diagonal($reporte['fecha_levanta']); ?>" type="text">
-                <input value="<?php echo pon_diagonal($reporte['fecha_atiende']); ?>" type="text">
-                <input value="<?php echo $reporte['personal_levanta'];?>" type="text">
-                <input value="<?php echo $reporte['personal_atiende']; ?>" type="text">
-                <input value="<?php echo $reporte['area']; ?>" type="text">
-                <input value="<?php echo $reporte['detalles']; ?>" type="text">
-                <input value="<?php echo $reporte['causa']; ?>" type="text">
+            <!-- si hay folio-->
+                <label for="">FOLIO</label>
+                <input class="form-control" value="<?php echo $reporte['folio']; ?>" type="text" disabled>
+                <label for="">ASUNTO</label>
+                <input class="form-control" value="<?php echo $reporte['asunto']; ?>" type="text" disabled>
+                <label for="">USUARIO</label>
+                <input class="form-control" value="<?php echo $reporte['usuario']; ?>" type="text" disabled>
+                <label for="">FECHA EN QUE SE LEVANTO</label>
+                <input class="form-control" value="<?php echo pon_diagonal($reporte['fecha_levanta']); ?>" type="text" disabled>
+                <label for="">FECHA EN QUE SE ATENDIO</label>
+                <input class="form-control" value="<?php echo pon_diagonal($reporte['fecha_atiende']); ?>" type="text" disabled>
+            </div>
+            <div class="col">
+                <label for="">PERSONAL QUE LEVANTO</label>
+                <input class="form-control" value="<?php echo $reporte['personal_levanta'];?>" type="text" disabled>
+                <label for="">PERSONAL QUE ATENDIO</label>
+                <input class="form-control" value="<?php echo $reporte['personal_atiende']; ?>" type="text" disabled>
+                <label for="">AREA</label>
+                <input class="form-control" value="<?php echo $reporte['area']; ?>" type="text" disabled>
+                <label for="">DETALLES</label>
+                <input class="form-control" value="<?php echo $reporte['detalles']; ?>" type="text" disabled>
+                <label for="">CAUSA</label>
+                <input class="form-control" value="<?php echo $reporte['causa']; ?>" type="text" disabled>
             </div>
         </div>
+    <?php }else{
+        
+    ?>  <div align="center">  <h1>no se encontro nada</h1>  </div><?php
+    }
+    
+}else{
+        if(!empty($reportes)){
+    foreach ($reportes as $reporte){
+        if($reporte['estado']==1){
+        ?>
+        <div class="row">
+            <div class="col">
+            <!-- si hay folio-->
+                <label for="">FOLIO</label>
+                <input class="form-control" value="<?php echo $reporte['folio']; ?>" type="text" disabled>
+                <label for="">ASUNTO</label>
+                <input class="form-control" value="<?php echo $reporte['asunto']; ?>" type="text" disabled>
+                <label for="">USUARIO</label>
+                <input class="form-control" value="<?php echo $reporte['usuario']; ?>" type="text" disabled>
+                <label for="">FECHA EN QUE SE LEVANTO</label>
+                <input class="form-control" value="<?php echo pon_diagonal($reporte['fecha_levanta']); ?>" type="text" disabled>
+                <label for="">FECHA EN QUE SE ATENDIO</label>
+                <input class="form-control" value="<?php echo pon_diagonal($reporte['fecha_atiende']); ?>" type="text" disabled>
+            </div>
+            <div class="col">
+                <label for="">PERSONAL QUE LEVANTO</label>
+                <input class="form-control" value="<?php echo $reporte['personal_levanta'];?>" type="text" disabled>
+                <label for="">PERSONAL QUE ATENDIO</label>
+                <input class="form-control" value="<?php echo $reporte['personal_atiende']; ?>" type="text" disabled>
+                <label for="">AREA</label>
+                <input class="form-control" value="<?php echo $reporte['area']; ?>" type="text" disabled>
+                <label for="">DETALLES</label>
+                <input class="form-control" value="<?php echo $reporte['detalles']; ?>" type="text" disabled>
+                <label for="">CAUSA</label>
+                <input class="form-control" value="<?php echo $reporte['causa']; ?>" type="text" disabled>
+            </div>
+        </div>
+        <hr/>
         <?php 
         }
+        }
+    }else{
+    ?>    <div align="center">  <h1>no se encontro nada</h1>  </div> <?php
     }
-
+    }
  ?>
     </div>
    

@@ -2,7 +2,7 @@
 <?php if(isset($_COOKIE['usuario']) && isset($_COOKIE['password'])){
   
   include_once('librerias/info.php');
-  $query = "SELECT pass, nombre FROM personal WHERE nombre='".$_COOKIE['usuario']."'";
+  $query = "SELECT pass, nombre, esadmin FROM personal WHERE nombre='".$_COOKIE['usuario']."'";
   $statement = $db->prepare($query);
   $statement->execute();
   $usuario = $statement->fetch();
@@ -65,16 +65,11 @@ $statement->closeCursor();
         <a href="capturar.php">CAPTURAR</a>
         <a href="modificar.php">MODIFICAR REPORTES</a>
 <!-- desplegable de buscar-->
-        <li><a>BUSCAR</a>
-          <ul>
-				<li><a href="mfolio.php">POR FOLIO</a></li>
-				<li><a href="musuario.php">POR NOMBRE USUARIO</a></li>
-				<li><a href="mpersonal.php">POR PERSONAL</a></li>
-                <li><a href="marea.php">POR AREA</a></li>          
-          </ul>
-        </li>
-        <a href="termrepor.php">TERMINAR MIS REPORTES (<?php echo $n?>)</a>
-        </ul>
+        <a href="consulta.php">CONSULTAS</a>
+        <a href="terminar.php">TERMINAR CAPTURAS (<?php echo $n?>)</a>
+        <?php if($usuario['esadmin']==1){ ?>
+        <a href="admin.php">ADMIN</a><?php } ?>
+        <a href="logout.php">SALIR</a>
       </ul>
     </div>
 <!-- jumbotron de la parte de arriba -->

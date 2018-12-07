@@ -58,6 +58,7 @@ $n = sizeof($nr);
       <ul class="nav">
         <a href="capturar.php">CAPTURAR</a>
         <a href="modificar.php">MODIFICAR REPORTES</a>
+        <a href="consulta.php">CONSULTAS</a>
 <!-- desplegable de buscar-->
         <!-- <li><a>BUSCAR</a>
           <ul>
