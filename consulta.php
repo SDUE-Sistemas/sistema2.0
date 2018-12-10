@@ -1,28 +1,5 @@
-<?php if(isset($_COOKIE['usuario']) && isset($_COOKIE['password'])){
-  
-  include_once('librerias/info.php');
-  $query = "SELECT pass, nombre, esadmin FROM personal WHERE nombre='".$_COOKIE['usuario']."'";
-  $statement = $db->prepare($query);
-  $statement->execute();
-  $usuario = $statement->fetch();
-  $statement->closeCursor();
-  }else{
-  header('Location: index.php');
-    }
-if(!($usuario['pass']==$_COOKIE['password'])){
-  header('Location: index.php');
-}
-
-//sacar el numero de folios asociados al usuario logeado
-$user=$_COOKIE['usuario'];
-include_once('librerias/info.php');
-
-$query = "SELECT folio FROM reportes WHERE personal_atiende='".$user."' AND estado = 0";
-$statement = $db->prepare($query);
-$statement->execute();
-$nr = $statement->fetchAll();
-$statement->closeCursor();
-$n = sizeof($nr);
+<?php 
+include_once("librerias/control_usuario.php");
 ?>
 <!--html-->
 <!doctype html>
@@ -39,14 +16,19 @@ $n = sizeof($nr);
     <link rel="stylesheet" href="librerias/estilo.css">
     <link rel="stylesheet" href="librerias/fuente.css">
     <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.1/themes/base/jquery-ui.css" />
-<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
-<script src="http://code.jquery.com/ui/1.10.1/jquery-ui.js"></script>
-<script>
-$(function () {
-$("#fecha").datepicker();
-});
-</script>
-
+    <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+    <script src="http://code.jquery.com/ui/1.10.1/jquery-ui.js"></script>
+    <script>
+        $(function () {
+        $("#fecha").datepicker();
+        });
+    </script>
+    <style>
+        .datepicker:disabled {
+        background-color: #e9ecef;
+        opacity: 1;
+}
+    </style>
 </head>
 <!-- empieza el body -->
 <body>
@@ -57,7 +39,7 @@ $("#fecha").datepicker();
       <ul class="nav">
         <a href="capturar.php">CAPTURAR</a>
         <a href="modificar.php">MODIFICAR REPORTES</a>
-        <a href="consultar.php">CONSULTAS</a>
+        <a href="consulta.php">CONSULTAS</a>
 <!-- desplegable de buscar-->
         <!-- <li><a>BUSCAR</a>
           <ul>
@@ -70,7 +52,15 @@ $("#fecha").datepicker();
         <a href="terminar.php">TERMINAR CAPTURAS (<?php echo $n?>)</a>
         <?php if($usuario['esadmin']==1){ ?>
         <a href="admin.php">ADMIN</a><?php } ?>
-        <a href="logout.php">SALIR</a>
+        <a href="logout.php" id="salir">SALIR</a>
+        <script>
+            salir.onclick=function(){
+                var mensaje = confirm("¿Seguro que desea salir?");
+                if(!mensaje){
+                    event.preventDefault();
+                }
+            }
+        </script>
         </ul>
       </ul>
     </div>
@@ -86,26 +76,50 @@ $("#fecha").datepicker();
         <form action="consulta_mostrar.php" method="post" id="main">
             <div class="row">
                 <div class="col" align="center">
-                    <label for="">folio 
+                    <label for="">FOLIO</label>
                         <input type="checkbox" name="" id="chkfolio" onchange="checkFolio(this);">
-                    </label>
                     
-                    <input type="text" name="folio" id=folio disabled>
+                    <input type="text"  class="form-control" name="folio" id=folio disabled>
                     <br>
 
-
-                    <label for="">fechas
-                        <input type="checkbox" name="chkfechas" id="chkfechas" checked>
-                    </label>
+                    <label for="">FECHAS</label>
+                    <input type="checkbox" name="chkfechas" id="chkfechas" checked>
                     
                     <div class="row">
                     <div class="col">
-                    <label for="">fecha1</label>
-                    <label for="">fecha2</label>
+                    <label for="">FECHA 1</label>
+                    <label for="">FECHA 2</label>
                     <br>
-                    <input type="text" name="fecha1" id="fecha1" class="datepicker" readonly="readonly" size="9" />
+
+                    <input type="text" name="fecha1" id="fecha1" class="datepicker"  readonly="readonly" size="9" style="
+                    display: block;
+                    width: 100%;
+                    height: calc(2.25rem + 2px);
+                    padding: 0.375rem 0.75rem;
+                    font-size: 1rem;
+                    line-height: 1.5;
+                    color: #495057;
+                    background-color: #fff;
+                    background-clip: padding-box;
+                    border: 1px solid #ced4da;
+                    border-radius: 0.25rem;
+                    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;"/>
                     
-                    <input type="text" name="fecha2" id="fecha2" class="datepicker" readonly="readonly" size="9" />
+                    <input type="text" name="fecha2" id="fecha2" class="datepicker" readonly="readonly" size="9" style="
+                    display: block;
+                    width: 100%;
+                    height: calc(2.25rem + 2px);
+                    padding: 0.375rem 0.75rem;
+                    font-size: 1rem;
+                    line-height: 1.5;
+                    color: #495057;
+                    background-color: #fff;
+                    background-clip: padding-box;
+                    border: 1px solid #ced4da;
+                    border-radius: 0.25rem;
+                    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out
+                    
+                    ;"/>
                     
                     
                     </div>
@@ -115,9 +129,9 @@ $("#fecha").datepicker();
                     
 
                     <div align="left">
-                        <label>area
+                        <label>AREA</label>
                             <input type="checkbox" name="" id="chkarea" checked>
-                        </label>
+                        
                     </div>
 <!-- Desplegable  Ciclo For DEPARTAMENTOS-->            
                     <?php
@@ -134,9 +148,9 @@ $("#fecha").datepicker();
                     <?php endforeach; ?>
                     </select>       
                     
-                    <label>personal 
+                    <label>PERSONAL</label>
                         <input type="checkbox" name="chkpersonal" id="chkpersonal" checked>
-                    </label>
+                    
 
 <!-- Desplegable  Ciclo For QUIEN ATIENDE-->
                     <?php
@@ -154,16 +168,16 @@ $("#fecha").datepicker();
                     <?php endforeach; ?>
                     </select>
                             
-                    <label for="">usuario 
+                    <label for="">USUARIO</label>
                         <input type="checkbox" name="chkusuario" id="chkusuario" checked>
-                    </label>
+                    
                     
                     <input type="text" name="usuario" id="usuario" class="form-control">
+                    <br>
+                    <button class="btn btn-outline-primary" type="submit" name="buscar" id="buscar" onclick="validar();">BUSCAR</button>
 
-                    <button type="submit" name="buscar" id="buscar" onclick="validar();">buscar</button>
-
-                    <button onclick="fecha1.value=''; event.preventDefault();">limpiar fecha 1</button>
-                    <button onclick="fecha2.value=''; event.preventDefault();">limpiar fecha 2</button>
+                    <button class="btn btn-outline-primary" onclick="fecha1.value=''; event.preventDefault();">LIMPIAR FECHA 1</button>
+                    <button class="btn btn-outline-primary" onclick="fecha2.value=''; event.preventDefault();">LIMPIAR FECHA 2</button>
                 </div>
             </div>
         </form>
@@ -226,6 +240,8 @@ $("#fecha").datepicker();
             personal.disabled = true;
         }
     }
+
+    
     function validar(){
         if(!folio.disabled & folio.value==""){
             alert("Folio esta vacio");
@@ -243,6 +259,7 @@ $("#fecha").datepicker();
         }   
         
     }
+
 </script>
 
 </body>

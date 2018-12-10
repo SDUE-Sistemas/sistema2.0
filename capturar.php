@@ -71,7 +71,15 @@ $n = sizeof($nr);
         <a href="terminar.php">TERMINAR CAPTURAS (<?php echo $n?>)</a>
         <?php if($usuario['esadmin']==1){ ?>
         <a href="admin.php">ADMIN</a><?php } ?>
-        <a href="logout.php">SALIR</a>
+        <a href="logout.php" id="salir">SALIR</a>
+        <script>
+            salir.onclick=function(){
+                var mensaje = confirm("¿Seguro que desea salir?");
+                if(!mensaje){
+                    event.preventDefault();
+                }
+            }
+        </script>
         </ul>
       </ul>
     </div>
@@ -190,7 +198,6 @@ $n = sizeof($nr);
             event.preventDefault();
         }
         else{
-            alert("Guardado");
             var d = new Date();
             fecha.value=d.getFullYear() + "" + (d.getMonth() +1) + "" + d.getDate();
             

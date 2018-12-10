@@ -57,9 +57,11 @@
       <div class="col-md">
 <!-- form del login -->
     <form action="login.php" method="post" style="text-align:center">
-    <input name="usuario" id="usuario "type="text" class="form-control" style="text-align:center; width:350px;" placeholder="USUARIO">
+    <label>USUARIO</label>
+    <input name="usuario" id="usuario "type="text" class="form-control" style="text-align:center; width:350px;">
     <br><br>
-    <input name="password" id="password" type="password" class="form-control" style="text-align:center; width:350px;" placeholder="CONTRASEÑA">
+    <label>CONTRASEÑA</label>
+    <input name="password" id="password" type="password" class="form-control" style="text-align:center; width:350px;">
     <br><br>
     <button type="submit" class="btn btn-secondary">INGRESAR</button>
 </form>

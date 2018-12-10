@@ -1,7 +1,9 @@
+
 <!--sacar los datos de los reportes que vamos a consultar -->
 <?php
+require_once("librerias/control_usuario.php");
 require_once('librerias/elimina_acentos.php');
-include_once('librerias/info.php');
+require_once('librerias/info.php');
 $query="SELECT folio, asunto, usuario, fecha_levanta, fecha_atiende, personal_levanta, personal_atiende, area, detalles, causa, estado FROM reportes";
 $ejem="SELECT folio, asunto, usuario, fecha_levanta, fecha_atiende, personal_levanta, personal_atiende, area, detalles, causa, estado FROM reportes";
 if(isset($_POST['folio'])){
@@ -99,16 +101,28 @@ if(isset($_POST['folio'])){
       <ul class="nav">
         <a href="capturar.php">CAPTURAR</a>
         <a href="modificar.php">MODIFICAR REPORTES</a>
+        <a href="consulta.php">CONSULTAS</a>
 <!-- desplegable de buscar-->
-        <li><a>BUSCAR</a>
+        <!-- <li><a>BUSCAR</a>
           <ul>
 				<li><a href="mfolio.php">POR FOLIO</a></li>
 				<li><a href="musuario.php">POR NOMBRE USUARIO</a></li>
 				<li><a href="mpersonal.php">POR PERSONAL</a></li>
                 <li><a href="marea.php">POR AREA</a></li>          
           </ul>
-        </li>
-        <a href="termrepor.php">TERMINAR MIS REPORTES (<?php echo "x"?>)</a>
+        </li> -->
+        <a href="terminar.php">TERMINAR CAPTURAS (<?php echo $n?>)</a>
+        <?php if($usuario['esadmin']==1){ ?>
+        <a href="admin.php">ADMIN</a><?php } ?>
+        <a href="logout.php" id="salir">SALIR</a>
+        <script>
+            salir.onclick=function(){
+                var mensaje = confirm("¿Seguro que desea salir?");
+                if(!mensaje){
+                    event.preventDefault();
+                }
+            }
+        </script>
         </ul>
       </ul>
     </div>
@@ -118,7 +132,8 @@ if(isset($_POST['folio'])){
         <img src="img/Logo Chihuahua.png" alt="" style="height:150px; width:150px" align="right">
 <!-- Nombres -->
         <h1 class="display-6">SECRETARÍA DE DESARROLLO URBANO Y ECOLOGÍA</h1>
-        <p class="lead">AREA DE SISTEMAS / MODIFICAR </p>
+        <p class="lead">AREA DE SISTEMAS / CONSULTAS </p>
+    </div>
     </div>
     <div class="container">
     <?php
@@ -126,8 +141,10 @@ if(isset($_POST['folio'])){
     if($code==1 && $reporte['estado']==1){
         if(!empty($reporte)){
         ?>
+        <button class="btn btn-outline-primary" id="volver">Volver</button>
         <div class="row">
             <div class="col">
+            
             <!-- si hay folio-->
                 <label for="">FOLIO</label>
                 <input class="form-control" value="<?php echo $reporte['folio']; ?>" type="text" disabled>
@@ -153,6 +170,8 @@ if(isset($_POST['folio'])){
                 <input class="form-control" value="<?php echo $reporte['causa']; ?>" type="text" disabled>
             </div>
         </div>
+        <br>
+    
     <?php }else{
         
     ?>  <div align="center">  <h1>no se encontro nada</h1>  </div><?php
@@ -160,8 +179,11 @@ if(isset($_POST['folio'])){
     
 }else{
         if(!empty($reportes)){
+            ?>
+            <button class="btn btn-outline-primary" id="volver">Volver</button>
+        <?php
     foreach ($reportes as $reporte){
-        if($reporte['estado']==1){
+       
         ?>
         <div class="row">
             <div class="col">
@@ -191,15 +213,27 @@ if(isset($_POST['folio'])){
             </div>
         </div>
         <hr/>
+        <br>
+
         <?php 
+        
         }
-        }
+        
     }else{
-    ?>    <div align="center">  <h1>no se encontro nada</h1>  </div> <?php
+    ?>    
+    <div align="center">  
+    <h1>no se encontro nada</h1>  
+    <br>
+    <button class="btn btn-outline-primary" id="volver">Volver</button>
+    </div> <?php
     }
     }
  ?>
     </div>
-   
+   <script>
+   volver.onclick= function(){
+        location.href="consulta.php";
+   }
+   </script>
 </body>
 </html>

@@ -1,21 +1,11 @@
-<?php if(isset($_COOKIE['usuario']) && isset($_COOKIE['password'])){
-  
-  include_once('librerias/info.php');
-  $n=0;
-  $query = "SELECT pass, nombre, esadmin FROM personal WHERE nombre='".$_COOKIE['usuario']."'";
-  $statement = $db->prepare($query);
-  $statement->execute();
-  $usuario = $statement->fetch();
-  $statement->closeCursor();
-  }else{
-  header('Location: index.php');
-    }
-if(!($usuario['pass']==$_COOKIE['password'])){
-  header('Location: index.php');
-}
+<?php 
+
+include_once("librerias/control_usuario.php");
+
 if($usuario['esadmin']!=1){?>
    <script>
-   var mensaje = alert("Usted no es administrador"); 
+   var mensaje = alert("No puede acceder, USTED NO ES ADMINISTRADOR.");
+   location.href="capturar.php";
    </script><?php 
 }
 ?>
@@ -43,6 +33,7 @@ if($usuario['esadmin']!=1){?>
       <ul class="nav">
         <a href="capturar.php">CAPTURAR</a>
         <a href="modificar.php">MODIFICAR REPORTES</a>
+        <a href="consulta.php"> CONSULTAS </a>
 <!-- desplegable de buscar-->
         <!-- <li><a>BUSCAR</a>
           <ul>
@@ -55,7 +46,15 @@ if($usuario['esadmin']!=1){?>
         <a href="terminar.php">TERMINAR CAPTURAS (<?php echo $n?>)</a>
         <?php if($usuario['esadmin']==1){ ?>
         <a href="admin.php">ADMIN</a><?php } ?>
-        <a href="logout.php">SALIR</a>
+        <a href="logout.php" id="salir">SALIR</a>
+        <script>
+            salir.onclick=function(){
+                var mensaje = confirm("¿Seguro que desea salir?");
+                if(!mensaje){
+                    event.preventDefault();
+                }
+            }
+        </script>
         </ul>
       </ul>
     </div>
@@ -73,16 +72,30 @@ if($usuario['esadmin']!=1){?>
           <div class="col-md">
           <h1 style="font-size:20px; text-align:center">AGREGAR USUARIO</h1>
           <div align="center">
+          <a style="width:250px;"class="btn btn-outline-primary" href="agregarusuario.php" role="button">IR</a>
+          </div>
+          <br>
+          <h1 style="font-size:20px; text-align:center">MODIFICAR USUARIO</h1>
+          <div align="center">
           <a style="width:250px;"class="btn btn-outline-primary" href="" role="button">IR</a>
+          </div>
+          <br>
+          <h1 style="font-size:20px; text-align:center">ELIMINAR USUARIO</h1>
+          <div align="center">
+          <a style="width:250px;"class="btn btn-outline-primary" href="eliminar.php" role="button">IR</a>
           </div>
           </div>
       
           <div class="col-md">
-          <h1 style="font-size:20px; text-align:center">REPORTES SIN TERMINAR</h1>
+          <h1 style="font-size:20px; text-align:center">REPORTES SIN ASIGNAR</h1>
           <div align="center">
           <a style="width:250px;"class="btn btn-outline-primary" href="" role="button">IR</a>
           </div>
-
+          <br> <br>
+          <h1 style="font-size:20px; text-align:center">VACIAR BASE DE DATOS</h1>
+          <div align="center">
+          <a style="width:250px;"class="btn btn-outline-primary" href="" role="button">VACIAR</a>
+          </div>
           </div>
           </div>
     </div>
