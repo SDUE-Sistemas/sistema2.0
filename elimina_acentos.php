@@ -63,9 +63,44 @@ function quita_diagonal($cadena_sucia){
 function pon_diagonal($str_sin_diagonal){
         $str_con_diagonal =substr($str_sin_diagonal,0,4);
         $str_con_diagonal .="/";
-        $str_con_diagonal .=substr($str_sin_diagonal,4,2);
+        /*$str_con_diagonal .=*/
+        if(substr($str_sin_diagonal,4,2)=='01'){
+                $str_con_diagonal .="ENE";
+        }elseif(substr($str_sin_diagonal,4,2)=='02'){
+                $str_con_diagonal .="FEB";
+        }elseif(substr($str_sin_diagonal,4,2)=='03'){
+                $str_con_diagonal .="MAR";
+        }elseif(substr($str_sin_diagonal,4,2)=='04'){
+                $str_con_diagonal .="ABR";
+        }elseif(substr($str_sin_diagonal,4,2)=='05'){
+                $str_con_diagonal .="MAY";
+        }elseif(substr($str_sin_diagonal,4,2)=='06'){
+                $str_con_diagonal .="JUN";
+        }elseif(substr($str_sin_diagonal,4,2)=='07'){
+                $str_con_diagonal .="JUL";
+        }elseif(substr($str_sin_diagonal,4,2)=='08'){
+                $str_con_diagonal .="AGO";
+        }elseif(substr($str_sin_diagonal,4,2)=='09'){
+                $str_con_diagonal .="SEP";
+        }elseif(substr($str_sin_diagonal,4,2)=='10'){
+                $str_con_diagonal .="OCT";
+        }elseif(substr($str_sin_diagonal,4,2)=='11'){
+                $str_con_diagonal .="NOV";
+        }elseif(substr($str_sin_diagonal,4,2)=='12'){
+                $str_con_diagonal .="DIC";
+        }
         $str_con_diagonal .="/";
         $str_con_diagonal .=substr($str_sin_diagonal,6,2);
         return $str_con_diagonal;
 }
+function contarFilas($arreglo){
+
+        $cantidad = 0;
+     
+        foreach($arreglo as $elemento){
+         $cantidad ++;
+        }
+     
+        return $cantidad;
+     }
 ?>

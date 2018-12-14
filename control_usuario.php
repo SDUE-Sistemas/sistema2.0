@@ -1,7 +1,7 @@
 <?php if(isset($_COOKIE['usuario']) && isset($_COOKIE['password'])){
   
   include_once('librerias/info.php');
-  $query = "SELECT pass, nombre FROM personal WHERE nombre='".$_COOKIE['usuario']."'";
+  $query = "SELECT pass, nombre, esadmin FROM personal WHERE nombre='".$_COOKIE['usuario']."'";
   $statement = $db->prepare($query);
   $statement->execute();
   $usuario = $statement->fetch();

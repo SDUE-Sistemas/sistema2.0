@@ -7,6 +7,8 @@ ul{font-family:Gotham-Book;}
 li{font-family:Gotham-Book;}
 input{font-family:Gotham-Book;}
 select{font-family:Gotham-Book;}
+textarea{font-family:Gotham-Book;}
+textarea.text{font-family:Gotham-Book;}
 /* menu */
 div.scrollmenu {
     background-color:darkgrey;
