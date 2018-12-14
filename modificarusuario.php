@@ -89,11 +89,11 @@ $n = sizeof($nr);
         <img src="img/Logo Chihuahua.png" alt="" style="height:150px; width:150px" align="right">
 <!-- Nombres -->
         <h1 class="display-6">SECRETARÍA DE DESARROLLO URBANO Y ECOLOGÍA</h1>
-        <p class="lead">ÁREA DE SISTEMAS / ELIMINAR USUARIO </p>
+        <p class="lead">ÁREA DE SISTEMAS / MODIFICAR USUARIO </p>
     </div>
 <!-- contenido -->
 <div class="container">
-<form action="eliminarusuario.php" method="post" id="main">
+<form action="modusuariofinal.php" method="post" id="main">
     <div class="row">
     
         <div class="col" align="center">
@@ -106,39 +106,101 @@ $n = sizeof($nr);
             $statement->closeCursor();
             ?>
                 <!-- Desplegable  Ciclo For DEPARTAMENTOS-->
-                <select class="form-control" name="usuario" style="width:350px;">
+                <select class="form-control" name="usuario" onchange="verificar();" id="usuario" style="width:350px;">
                 <?php  foreach($personal as $personals): ?>
-                <option <?php if($personals['esadmin']==1) {echo "disabled";} ?>><?php echo $personals['nombre'];?></option>
+                <option><?php echo $personals['nombre'];?></option>
                 <?php endforeach; ?>
                 </select>
+            <br>
+            <div class="container" >
+            <br>
+            <div class="row">
+            <div class="col" align="right">
             
+            <label>NUEVO NOMBRE</label>
+            <input type="checkbox" name="na" id="na" checked>
+            <input type="text" id="nombre" name="nombre" class="form-control" style="width:30%">
+            <br>
+            </div>
+            <div class="col" align="left">
+            <label for="">NUEVA CONTRASEÑA</label>
+            <input type="checkbox" name="pa" id="pa" checked>
+            <input type="text" id="password" name="password" class="form-control" style="width:30%">
+            <input type="text" id="abcd" name="abcd" value="<?php echo $_COOKIE['usuario']; ?>" class="form-control" style="width:30%" hidden>
+            <br>
+            </div>
+            </div></div>
+            <label>HACER ADMINISTRADOR</label>
+            <input type="checkbox" name="esadmiin" id="esadmiin" checked>
             <br><br>
             </form>
-            <button class="btn btn-outline-primary"  id="eliminar">ELIMINAR</button>
-            <button class="btn btn-outline-primary"  id="volver">VOLVER</button>
+            <button class="btn btn-outline-primary"  id="agregar">MODIFICAR</button>
+            <button class="btn btn-outline-primary" id="cancelar">CANCELAR</button>
+            <button  class="btn btn-outline-primary"  id="volver">VOLVER</button>
         </div>
     </div>
 </div>
 
     <script Language="JavaScript">
-       eliminar.onclick=function(){
-           var mensaje = confirm("¿Seguro que desea eliminar este Usuario?");
-            if(mensaje){
-            alert("Usuario eliminado con exito");
-            }
-            else{
+        agregar.onclick=function(){
+           if(pa.checked==true && password.value=="" || na.checked==true && nombre.value==""){
+            alert("Hay campos vacios");
             event.preventDefault();
+           }else{
+            alert("Los cambios fueron realizados");
+           }
+           
+        }
+        cancelar.onclick=function(){
+                var mensaje=confirm("¿Seguro que desea cancelar?");
+                if(mensaje){
+                    nombre.value=""
+                    password.value="";
+                    na.checked=true;
+                    pa.checked=true;
+                    nombre.disabled=false;
+                    password.disabled=false;
+                    event.preventDefault();
+                }else{
+                    event.preventDefault();
+                }
             }
-       }
         volver.onclick=function(){
             var mensaje = confirm("¿Seguro que desea volver?");
             if(mensaje){
-                event.preventDefault();
-                location.href="admin.php";
+            event.preventDefault();
+            location.href="admin.php";
             }else{
             event.preventDefault();
             }
+        }
+        na.onclick=function(){
+        if(na.checked==true){
+        nombre.disabled=false;
+        }else{
+        nombre.disabled=true;
+        }
+        }
 
+        pa.onclick=function(){
+        if(pa.checked==true){
+        password.disabled=false;
+        }else{
+        password.disabled=true;
+        }
+        }
+        
+        function verificar(){
+            var x = document.getElementById("usuario").value;
+            var p = document.getElementById("abcd").value;
+            p = p.toUpperCase();
+            if(x==p){
+            esadmiin.checked=true;
+            }else{
+            esadmiin.disabled=false;
+            esadmiin.checked=false;
+            }
+            
         }
     </script>
 </body>

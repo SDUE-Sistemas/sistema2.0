@@ -2,7 +2,8 @@
 include_once("librerias/control_usuario.php");
 include_once("librerias/info.php");
 include_once("librerias/elimina_acentos.php");
-$query = "SELECT folio, usuario, personal_levanta, area, fecha_levanta, asunto FROM reportes WHERE personal_atiende='".$user."' AND estado = 0";
+$a = "DEJAR A CRITERIO DE UN ADMINISTRADOR";
+$query = "SELECT folio, usuario, personal_levanta, area, fecha_levanta, asunto FROM reportes WHERE personal_atiende='".$a."' AND estado = 0";
 $statement = $db->prepare($query);
 $statement->execute();
 $reportes = $statement->fetchAll();
@@ -17,9 +18,9 @@ $statement->closeCursor();
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="librerias/estilo.css">
     <link rel="stylesheet" href="librerias/fuente.css">
-    <link rel="stylesheet" href="jq/jquery-ui.css" />
-    <script src="jq/jquery-1.9.1.js"></script>
-    <script src="jq/jquery-ui.js"></script>
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.1/themes/base/jquery-ui.css" />
+    <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+    <script src="http://code.jquery.com/ui/1.10.1/jquery-ui.js"></script>
     <script src="librerias/calendario.js"></script>
     <script>
         $(function () {
@@ -37,7 +38,7 @@ $statement->closeCursor();
         <a href="capturar.php">CAPTURAR</a>
         <a href="modificar.php">MODIFICAR REPORTES</a>
         <a href="consulta.php">CONSULTAS</a>
-        <a href="terminar.php">TERMINAR CAPTURAS (<?php echo $n?>)</a>
+        <a href="terminar.php">ASIGNAR REPORTES (<?php echo $n?>)</a>
         <?php if($usuario['esadmin']==1){ ?>
         <a href="admin.php">ADMIN</a><?php } ?>
         <a href="logout.php" id="salir">SALIR</a>
@@ -65,14 +66,13 @@ $statement->closeCursor();
 
         <?php 
         if(empty($reportes)){
-        echo "<div align='center'><h1>No tiene reportes sin atender</h1></div>";
+        echo "<div align='center'><h1>No hay reportes sin asignar</h1></div>";
         }
         foreach($reportes as $reporte):?>
-        <form action="terminar_r.php" method="post" id="form<?php echo $reporte['folio'];?>">
+        <form action="acabarasignar.php" method="post" id="form<?php echo $reporte['folio'];?>">
             <div class="row">
                 <div class="col">
-                <label>DETALLES</label>
-                    <textarea class="form-control" name="detalles" id="detalles<?php echo $reporte['folio'];?>" style="height:110px"></textarea>
+                
                     <label for="">FOLIO</label>
                     <input type="text" class="form-control"  value="<?php echo $reporte['folio']; ?>" disabled>
                     <input type="text" class="form-control" name="folio" value="<?php echo $reporte['folio']; ?>" hidden> 
@@ -85,40 +85,35 @@ $statement->closeCursor();
                     <!-- height: width: -->
                 </div>
                 <div class="col">
-                <label>CAUSA</label>
-                    <select name="causa" class="form-control">
-                    <option>FALLA</option>
-                    <option>CAPACITACION</option>
-                    <option>NUEVO REQUERIMIENTO</option>
-                    <option>SEDU</option>
-                    </select>
-                    <label for="">FECHA DE ATENCIÓN</label>
-                    <br>
-                    <input type="text" name="fecha" class="datepicker" id="fecha<?php echo $reporte['folio']?>"  readonly="readonly" size="60" style="
-                    display: block;
-                    width: 100%;
-                    height: calc(2.25rem + 2px);
-                    padding: 0.375rem 0.75rem;
-                    font-size: 1rem;
-                    line-height: 1.5;
-                    color: #495057;
-                    background-color: #fff;
-                    background-clip: padding-box;
-                    border: 1px solid #ced4da;
-                    border-radius: 0.25rem;
-                    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;"/> 
-                    <label for="">ÁREA</label>
+                
+                    <label for="">AREA</label>
                     <input type="text" class="form-control" value="<?php echo $reporte['area']; ?>" disabled>
                     <label for="">FECHA EN QUE SE LEVANTÓ</label>
                     <input type="text" class="form-control" value="<?php echo pon_diagonal($reporte['fecha_levanta']) ?>" disabled>
                     <label for="">PERSONAL QUE LEVANTÓ</label>
                     <input type="text" class="form-control" value="<?php echo $reporte['personal_levanta']; ?>" disabled>
+                    <label>PERSONAL QUE ATENDERA</label>
+                    <?php
+            $query = "SELECT nombre FROM personal";
+            $statement = $db->prepare($query);
+            $statement->execute();
+            $personals = $statement->fetchALL();
+            $statement->closeCursor();
+            ?>
+                <!-- Desplegable  Ciclo For QUIEN ATIENDE-->
+                <select class="form-control" name="personal_atiende" >
+                    <option>DEJAR A CRITERIO DE UN ADMINISTRADOR</option>
+                <?php  foreach($personals as $personal): ?>
+                  <option><?php echo $personal['nombre'];?></option>
+                <?php endforeach; ?>
+                </select>
                 </div> 
             </div>  
             <br>
         <div class="row" align="center">
 
-        <div class="col"> <button type="submit" id="btn<?php echo $reporte['folio']?>" class="btn btn-outline-primary" form="form<?php echo $reporte['folio'];?>">GUARDAR</button> </div>
+
+        <div class="col"> <button type="submit" class="btn btn-outline-primary" form="form<?php echo $reporte['folio'];?>">GUARDAR</button> </div>
 
         </form>
         
@@ -127,21 +122,9 @@ $statement->closeCursor();
                      <button type="submit" class="btn btn-outline-primary">MODIFICAR</button>
                     </form> </div>
         </div>            
-        <hr/>
+        <hr/>    
         <?php endforeach; ?>
     </div>
-    <script>
-    <?php foreach($reportes as $reporte): ?>
-        btn<?php echo $reporte['folio']; ?>.onclick = function(){
-
-            if(detalles<?php echo $reporte['folio']; ?>.value=="" || fecha<?php echo $reporte['folio']; ?>.value=="" ){
-
-                alert("revise que todos los campos esten llenos");
-                event.preventDefault();
-            }
-            
-            }
-    <?php endforeach; ?>
-    </script>
+    
 </body>
 </html>

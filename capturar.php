@@ -89,7 +89,7 @@ $n = sizeof($nr);
         <img src="img/Logo Chihuahua.png" alt="" style="height:150px; width:150px" align="right">
 <!-- Nombres -->
         <h1 class="display-6">SECRETARÍA DE DESARROLLO URBANO Y ECOLOGÍA</h1>
-        <p class="lead">AREA DE SISTEMAS / CAPTURAR </p>
+        <p class="lead">ÁREA DE SISTEMAS / CAPTURAR </p>
     </div>
 <!-- contenido -->
     <div class="container">
@@ -99,10 +99,11 @@ $n = sizeof($nr);
         <div class="row">
             
             <div class="col-md">
+                <input type="text" value="levanta" name="code" hidden>
                 <label>FOLIO</label>
                 <input style="text-align:center" type="text" class="form-control" value="<?php echo $folio_max['folio']+1;?>" name="folio" disabled>
                 <label>ASUNTO</label>
-                <input type="text" class="form-control" name="asunto" id="asunto" >
+                <textarea type="text" autocomplete="off" class="form-control" name="asunto" id="asunto"></textarea>
                 <label>QUIEN REPORTA</label>
                 <input type="text" class="form-control" name="quien_reporta" id="quien_reporta">
                 <!-- input invisible del la fecha acutual que se va a rellenar con javascript -->
@@ -127,7 +128,7 @@ $n = sizeof($nr);
                 <?php endforeach; ?>
                 </select>
                 
-                <label>PERSONAL QUE LEVANTO EL REPORTE</label>
+                <label>PERSONAL QUE LEVANTÓ EL REPORTE</label>
                 <!-- Desplegable  Ciclo For QUIEN LEVANTA-->
                 <?php
             $query = "SELECT nombre FROM personal";
@@ -170,10 +171,13 @@ $n = sizeof($nr);
                     
                     <!-- agregar -->
                     <div class="col-md" align="right"> 
+
+                    <br>
                     <button form="main" type="submit" class="btn btn-outline-primary" onclick="validar();">AGREGAR</button>
                     </div>
                     <!-- cancelar -->
                     <div class="col-md" align="left">
+                    <br>
                 <input type="button" value="LIMPIAR" onclick="cancelar();" class="btn btn-outline-primary">
                     </div>
                 </div>

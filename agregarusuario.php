@@ -89,7 +89,7 @@ $n = sizeof($nr);
         <img src="img/Logo Chihuahua.png" alt="" style="height:150px; width:150px" align="right">
 <!-- Nombres -->
         <h1 class="display-6">SECRETARÍA DE DESARROLLO URBANO Y ECOLOGÍA</h1>
-        <p class="lead">AREA DE SISTEMAS / AGREGAR USUARIO </p>
+        <p class="lead">ÁREA DE SISTEMAS / AGREGAR USUARIO </p>
     </div>
 <!-- contenido -->
 <div class="container">

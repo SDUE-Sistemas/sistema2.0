@@ -1,6 +1,11 @@
 <?php
      include_once('librerias/info.php');
+     include_once('librerias/elimina_acentos.php');
+     if(!empty($_POST['folio'])){
      $folio = $_POST['folio'];
+     }else{
+      $folio = $_GET['folio'];
+     }
      $query = "SELECT folio FROM reportes WHERE folio LIKE $folio";
      $statement = $db->prepare($query);
      $statement->execute();
@@ -8,7 +13,7 @@
      $x=$x['folio'];
      $statement->closeCursor();
 
-     $query = "SELECT folio, asunto, usuario, fecha_levanta, personal_levanta, personal_atiende, area FROM reportes WHERE folio=$x";
+     $query = "SELECT folio, causa, asunto, usuario, fecha_levanta, fecha_atiende, personal_levanta, personal_atiende, area, detalles, estado FROM reportes WHERE folio=$x";
      $statement = $db->prepare($query);
      $statement->execute();
      $reporte = $statement->fetch();
@@ -38,11 +43,12 @@
              <img src="img/Logo Chihuahua.png" alt="" style="height:150px; width:150px" align="right">
 <!-- Nombres -->
              <h1 class="display-6">SECRETARÍA DE DESARROLLO URBANO Y ECOLOGÍA</h1>
-             <p class="lead">AREA DE SISTEMAS / REPORTE </p>
+             <p class="lead">ÁREA DE SISTEMAS / REPORTE </p>
          </div>
 <!-- Container -->
          <div class="container">
              <form>   
+             <?php if($reporte['estado']==0){?>
                  <div class="row">
 <!-- parte izquierda del contenedor -->
                      <div class="col">
@@ -65,7 +71,7 @@
                          value="<?php echo $reporte['area'];?>">
                          
                          <label>PERSONAL QUE LEVANTÓ</label>
-                         <input style="text-align:center" type="text" class="form-control" disabled
+                         <input style="text-align:center; " type="text" class="form-control" disabled
                          value="<?php echo $reporte['personal_levanta'];?>">
                          
                          <label>PERSONAL QUE ATENDERÁ</label>
@@ -73,12 +79,69 @@
                          value="<?php echo $reporte['personal_atiende']?>">
                      </div>
                  </div>
+             <?php }else{?>
+                <div class="row">
+<!-- parte izquierda del contenedor -->
+                     <div class="col">
+                         <label>FOLIO</label>
+                         <input form="main" name="folio" style="text-align:center" type="text" class="form-control" disabled
+                         value="<?php echo $reporte['folio'];?>">
+                         
+                         <label>ASUNTO</label>
+                         <input name="asunto" style="text-align:center" type="text" class="form-control" disabled
+                         value="<?php echo $reporte['asunto'];?>">
+                         
+                         <label>QUIEN REPORTA</label>
+                         <input name="usuario" style="text-align:center" type="text" class="form-control" disabled
+                         value="<?php echo $reporte['usuario']?>">
+                         <label>DETALLES</label>
+                         <textarea style="text-align:center; height:110px; font-family:Gotham-Book;" type="text" class="form-control" 
+                         disabled><?php echo $reporte['detalles']?></textarea>
+                         
+                     </div>
+<!-- parte derecha del contenedor -->
+                     <div class="col">   
+                         <label>DEPARTAMENTO</label>
+                         <input name="area" style="text-align:center" type="text" class="form-control" disabled
+                         value="<?php echo $reporte['area'];?>">
+                         
+                         <label>PERSONAL QUE LEVANTÓ</label>
+                         <input style="text-align:center" type="text" class="form-control" disabled
+                         value="<?php echo $reporte['personal_levanta'];?>">
+                         
+                         <label>PERSONAL QUE ATENDIÓ</label>
+                         <input  style="text-align:center" type="text" class="form-control" disabled
+                         value="<?php echo $reporte['personal_atiende']?>">
+                         <div class="row">
+                         <div class="col">
+                         <label>FECHA EN QUE SE ATENDIÓ</label>
+                         <input  style="text-align:center;" type="text" class="form-control" disabled
+                         value="<?php echo pon_diagonal($reporte['fecha_atiende'])?>">
+                         </div>
+                         <div class="col">
+                         <label>FECHA EN QUE SE LEVANTÓ</label>
+                         <input  style="text-align:center;" type="text" class="form-control" disabled
+                         value="<?php echo pon_diagonal($reporte['fecha_levanta'])?>">
+                         </div>
+                         </div>
+                         <label>CAUSA</label>
+                         <input name="usuario" style="text-align:center" type="text" class="form-control" disabled
+                         value="<?php echo $reporte['causa']?>">
+                     </div>
+                 </div>
+             <?php }?>
              </form>
              <br>
              <div class="row" align="center">
 
                  <div class="col" align="right">
-                     <a class="btn btn-outline-primary" href="capturar.php" role="button">ACEPTAR</a>
+                     <a class="btn btn-outline-primary"<?php  
+                     if(isset($_POST['code'])){
+                     if($_POST['code']=="terminado"){ echo 'href="terminar.php"'; }
+                     elseif($_POST['code']=="modificar"){ echo 'href="modificar.php"'; }
+                     
+                     }elseif($_GET['code']=="levanta"){ echo 'href="capturar.php"'; }
+                     ?>role="button">ACEPTAR</a>
                  </div>
                  <div class="col" align="center">
                  <a class="btn btn-outline-primary" href="pdf.php?folio=<?php echo $reporte['folio'];?>" 

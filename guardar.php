@@ -23,6 +23,14 @@ $statement->bindValue(':estado', $estado);
 $statement->bindValue(':fecha', $fecha);
 $statement->execute();
 $statement->closeCursor();
+
+     include_once('librerias/info.php');
+     $query = "SELECT folio FROM reportes WHERE folio = (SELECT max(folio) FROM reportes)";
+     $statement = $db->prepare($query);
+     $statement->execute();
+     $x = $statement->fetch();
+     $x=$x['folio'];
+     $statement->closeCursor();
     
-header('Location: folio.php');
+header('Location: foliomodificar.php?folio='.$x.'&code=levanta');
 ?>

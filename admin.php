@@ -64,7 +64,7 @@ if($usuario['esadmin']!=1){?>
         <img src="img/Logo Chihuahua.png" alt="" style="height:150px; width:150px" align="right">
 <!-- Nombres -->
         <h1 class="display-6">SECRETARÍA DE DESARROLLO URBANO Y ECOLOGÍA</h1>
-        <p class="lead">AREA DE SISTEMAS / ADMINISTRADOR</p>
+        <p class="lead">ÁREA DE SISTEMAS / ADMINISTRADOR</p>
     </div>
   <!-- Contenido -->
   <div class="container">
@@ -77,7 +77,7 @@ if($usuario['esadmin']!=1){?>
           <br>
           <h1 style="font-size:20px; text-align:center">MODIFICAR USUARIO</h1>
           <div align="center">
-          <a style="width:250px;"class="btn btn-outline-primary" href="" role="button">IR</a>
+          <a style="width:250px;"class="btn btn-outline-primary" href="modificarusuario.php" role="button">IR</a>
           </div>
           <br>
           <h1 style="font-size:20px; text-align:center">ELIMINAR USUARIO</h1>
@@ -89,18 +89,35 @@ if($usuario['esadmin']!=1){?>
           <div class="col-md">
           <h1 style="font-size:20px; text-align:center">REPORTES SIN ASIGNAR</h1>
           <div align="center">
-          <a style="width:250px;"class="btn btn-outline-primary" href="" role="button">IR</a>
+          <a style="width:250px;"class="btn btn-outline-primary" href="sinasignar.php" role="button">IR</a>
           </div>
-          <br> <br>
+          <br><br><br><br><br>
           <h1 style="font-size:20px; text-align:center">VACIAR BASE DE DATOS</h1>
           <div align="center">
-          <a style="width:250px;"class="btn btn-outline-primary" href="" role="button">VACIAR</a>
+          <a style="width:250px;"class="btn btn-outline-primary" id="vaciars" href="eliminardb.php"; role="button">VACIAR</a>
           </div>
           </div>
           </div>
     </div>
   </div>
+<script>
+    vaciars.onclick=function(){
+        var mensaje = confirm("La Base de Datos de Reportes se vaciara, y los datos ya no se podran recuperar");
+        if(mensaje){
+            var seguridad = confirm("¿Realmente esta seguro?");
+            if(seguridad){
 
+            }
+            else{
+            event.preventDefault();
+            }
+        }
+        else{
+            event.preventDefault();
+        }
+    }
+
+</script>
 <!-- Librerias No Mover >:V -->
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
          <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>

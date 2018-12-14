@@ -12,7 +12,7 @@
   if($usuario['pass']==$_COOKIE['password']){
     //Si es que es correcta la contraseña lo mandamos a la pagina principal para que empiece a trabajar
     header('Location:capturar.php');
-  }else{
+  }elseif(!isset($_GET['code'])){
     //si es que la contraseña no coincide le decimos que el usuario o la contraseña estaba mal
       ?>
       <script>alert("Contraseña y/o usuario incorrecta(s)");</script>
@@ -58,22 +58,35 @@
 <!-- form del login -->
     <form action="login.php" method="post" style="text-align:center">
     <label>USUARIO</label>
-    <input name="usuario" id="usuario "type="text" class="form-control" style="text-align:center; width:350px;">
+    <input autocomplete="off" name="usuario" id="usuario" class="form-control" style="text-align:center; width:350px;">
     <br><br>
     <label>CONTRASEÑA</label>
-    <input name="password" id="password" type="password" class="form-control" style="text-align:center; width:350px;">
+    <input autocomplete="off" name="password" id="pass" type="password" class="form-control" style="text-align:center; width:350px;">
     <br><br>
-    <button type="submit" class="btn btn-secondary">INGRESAR</button>
+    <button type="submit" id="entrar"; class="btn btn-secondary" >INGRESAR</button>
 </form>
 </div>
 <div class="col-md"></div>
 </div>
 </div>
 
+
    <!-- Librerias -->
    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <script src="js/bootstrap.min.js"></script>
+    <script>
+      entrar.onclick=function () {
+        
+        if(usuario.value=="" ||  pass.value==""){
+         alert("CAMPOS VACIOS");
+         event.preventDefault();
+        }else{
+        }
+        
+      }
+
     
+    </script>
 </body>
 </html>

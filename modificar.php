@@ -1,20 +1,9 @@
 <!-- control de usuarios -->
-<?php if(isset($_COOKIE['usuario']) && isset($_COOKIE['password'])){
-  
-  include_once('librerias/info.php');
-  $query = "SELECT pass, nombre, esadmin FROM personal WHERE nombre='".$_COOKIE['usuario']."'";
-  $statement = $db->prepare($query);
-  $statement->execute();
-  $usuario = $statement->fetch();
-  $statement->closeCursor();
-  }else{
-  header('Location: index.php');
-    }
-if(!($usuario['pass']==$_COOKIE['password'])){
-  header('Location: index.php');
-}
+<?php 
 
+    include_once('librerias/control_usuario.php');
     include_once('librerias/info.php');
+    include_once('librerias/elimina_acentos.php');
     $query = "SELECT folio FROM reportes WHERE folio = (SELECT max(folio) FROM reportes)";
     $statement = $db->prepare($query);
     $statement->execute();
@@ -33,7 +22,7 @@ $n = sizeof($n);
 // sacar los datos del reporte que vamos a modificar
 if(isset($_POST['folio'])){
 $x=$_POST['folio'];
-$query = "SELECT folio, asunto, usuario, fecha_levanta, personal_levanta, personal_atiende, area FROM reportes WHERE folio=$x";
+$query = "SELECT folio, asunto, estado, detalles, usuario, fecha_levanta, fecha_atiende, personal_levanta, personal_atiende, area FROM reportes WHERE folio=$x";
 $statement = $db->prepare($query);
 $statement->execute();
 $reporte = $statement->fetch();
@@ -54,6 +43,15 @@ $statement->closeCursor();
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="librerias/estilo.css">
     <link rel="stylesheet" href="librerias/fuente.css">
+    <link rel="stylesheet" href="jq/jquery-ui.css" />
+    <script src="jq/jquery-1.9.1.js"></script>
+    <script src="jq/jquery-ui.js"></script>
+    <script src="librerias/calendario.js"></script>
+    <script>
+        $(function () {
+        $("#fecha").datepicker();
+        });
+    </script>
 </head>
 <!-- empieza el body -->
 <body>
@@ -86,7 +84,7 @@ $statement->closeCursor();
         <img src="img/Logo Chihuahua.png" alt="" style="height:150px; width:150px" align="right">
 <!-- Nombres -->
         <h1 class="display-6">SECRETARÍA DE DESARROLLO URBANO Y ECOLOGÍA</h1>
-        <p class="lead">AREA DE SISTEMAS / MODIFICAR </p>
+        <p class="lead">ÁREA DE SISTEMAS / MODIFICAR </p>
     </div>
     <!-- un if que revisa si nos han enviado el folio que nesecitamos para la busqueda -->
     <?php if(!isset($_POST['folio'])){?>
@@ -107,7 +105,99 @@ $statement->closeCursor();
     vamos a sacar el ultimo folio que tenemos en nuestra base de datos y vamos a hacer la comparacion este
     cero y el ultimo folio-->
     
-    <?php }elseif(($folio_max['folio']+1)>$_POST['folio'] && $_POST['folio']>0) { ?>
+    <?php }elseif(($folio_max['folio']+1)>$_POST['folio'] && $_POST['folio']>0) { 
+        
+        
+        if($reporte['estado']==1){
+            if($usuario['esadmin']==1){ ?>
+                
+                <div class="container">
+    <form action="modificarreporte.php" method="POST" id="main">
+        <div class="row">
+            <div class="col">
+                <input id="a" name="a" value="1" hidden>
+                <input id="b" name="b" value="1" hidden>
+                <label for="">FOLIO</label>
+                <input type="text"style="text-align:center" class="form-control" name="folio" value="<?php echo $reporte['folio']; ?>" disabled>
+                <input type="text" class="form-control" name="folio" value="<?php echo $reporte['folio']; ?>" hidden>
+                <label for="">ASUNTO</label>
+                <input type="text" class="form-control" id="asunto" name="asunto" value="<?php echo $reporte['asunto']; ?>">
+                <label for="">QUIEN REPORTA</label>
+                <input type="text" class="form-control" id="usuario" name="usuario" value="<?php echo $reporte['usuario']; ?>">
+                <label for="">DETALLES</label>
+                <textarea style="font-family:Gotham-Book" type="text" class="form-control" id="detalles" name="detalles" value=""><?php echo $reporte['detalles']; ?></textarea>
+                
+                
+            </div>
+            <div class="col">
+            <label>DEPARTAMENTO</label>
+            <!-- Desplegable  Ciclo For DEPARTAMENTOS-->            
+            <?php
+            $query = "SELECT nombre FROM departamentos";
+            $statement = $db->prepare($query);
+            $statement->execute();
+            $departamentos = $statement->fetchALL();
+            $statement->closeCursor();
+            ?>
+                <!-- Desplegable  Ciclo For DEPARTAMENTOS-->
+                <select class="form-control" name="area" >
+                <?php  foreach($departamentos as $departamento): ?>
+                  <option <?php if($departamento['nombre']==$reporte['area']){echo "selected";} ?>><?php echo $departamento['nombre'];?></option>
+                <?php endforeach; ?>
+                </select>
+                <label>PERSONAL QUE LEVANTÓ</label>
+                <!-- Desplegable  Ciclo For QUIEN LEVANTA-->
+                <?php
+            $query = "SELECT nombre FROM personal";
+            $statement = $db->prepare($query);
+            $statement->execute();
+            $personals = $statement->fetchALL();
+            $statement->closeCursor();
+            ?>
+                <!-- Desplegable  Ciclo For QUIEN LEVANTA-->
+                <select class="form-control" name="personal_levanto" >
+                <?php  foreach($personals as $personal): ?>
+                  <option <?php if($reporte['personal_levanta']==$personal['nombre']){echo "selected";} ?>><?php echo $personal['nombre'];?></option>
+                <?php endforeach; ?>
+                </select>
+                <label>PERSONAL QUE ATENDERÁ</label>
+                <!-- Desplegable  Ciclo For QUIEN ATIENDE-->
+                <select class="form-control" name="personal_atiende" >
+                    <option>DEJAR A CRITERIO DE UN ADMINISTRADOR</option>
+                <?php  foreach($personals as $personal): ?>
+                  <option <?php if($personal['nombre']==$reporte['personal_atiende']){echo "selected";} ?>><?php echo $personal['nombre'];?></option>
+                <?php endforeach; ?>
+                </select>
+               
+                <br>
+            </div>
+            </form>
+        </div>
+        <div class="row">
+        <div class="col" align="center">
+            <br>
+        <button  class="btn btn-outline-primary" onclick="cambios();" form="main">GUARDAR</button>
+                <a name="" id="" class="btn btn-outline-primary" href="modificar.php" role="button" onclick="cancelar();">CANCELAR</a> 
+    </div>
+    </div>
+    </div>
+
+            <?php }else{?>
+                <div class="row">
+                <div class="col" align="center">
+                    <br>
+                    <h1>Usted no puede modificar ese reporte </h1>
+                        <a name="" id="" class="btn btn-outline-primary" href="modificar.php" role="button">VOLVER</a> 
+            </div>
+            </div>
+            <?php 
+            }
+        }
+        else
+        {
+        
+        
+        ?>
     <div class="container">
     <form action="modificarreporte.php" method="POST" id="main">
         <div class="row">
@@ -137,7 +227,7 @@ $statement->closeCursor();
                   <option <?php if($departamento['nombre']==$reporte['area']){echo "selected";} ?>><?php echo $departamento['nombre'];?></option>
                 <?php endforeach; ?>
                 </select>
-                <label>PERSONAL QUE LEVANTO</label>
+                <label>PERSONAL QUE LEVANTÓ</label>
                 <!-- Desplegable  Ciclo For QUIEN LEVANTA-->
                 <?php
             $query = "SELECT nombre FROM personal";
@@ -172,7 +262,7 @@ $statement->closeCursor();
     </div>
     </div>
     <!-- si el folio no esta en el rango permitido madamos un alert y lo redireccionamos -->
-    <?php }else{ ?>
+    <?php }}else{ ?>
         <script>
             alert("folio inexistente");
             location.href ="modificar.php";
@@ -197,10 +287,20 @@ $statement->closeCursor();
         }
     }
     function cambios(){
-    if(asunto.value=="" || usuario.value==""){
+    var x = document.getElementById("a").value;
+    var y = document.getElementById("b").value;
+    if(x==y){
+        if(detalles.value == "" || asunto.value=="" || usuario.value==""){
+            alert("No puede dejar campos vacios");
+            event.preventDefault();
+        }
+    }
+    else if(x!=y && asunto.value=="" || usuario.value==""){
     alert("Llene todos los campos");
     event.preventDefault();
     }
+    
+
     }
         </script>
 </body>
