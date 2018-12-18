@@ -238,7 +238,7 @@ include_once("librerias/control_usuario.php");
             event.preventDefault();
         }
         if(!fecha1.disabled & !fecha2.disabled){
-            if(fecha1.value=="" & fecha2.value==""){
+            if(fecha1.value=="" | fecha2.value==""){
             alert("alguna fecha esta vacia");
             event.preventDefault();
         }
