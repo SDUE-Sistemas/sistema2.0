@@ -93,6 +93,14 @@ function pon_diagonal($str_sin_diagonal){
         $str_con_diagonal .=substr($str_sin_diagonal,6,2);
         return $str_con_diagonal;
 }
+function pon_diagonal_xd($str_sin_diagonal){
+        $str_con_diagonal =substr($str_sin_diagonal,0,4);
+        $str_con_diagonal .="/";
+        $str_con_diagonal .=substr($str_sin_diagonal,4,2);
+        $str_con_diagonal .="/";
+        $str_con_diagonal .=substr($str_sin_diagonal,6,2);
+        return $str_con_diagonal;
+}
 function contarFilas($arreglo){
 
         $cantidad = 0;
