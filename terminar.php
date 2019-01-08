@@ -110,7 +110,7 @@ $statement->closeCursor();
                     <label for="">ÁREA</label>
                     <input type="text" class="form-control" value="<?php echo $reporte['area']; ?>" disabled>
                     <label for="">FECHA EN QUE SE LEVANTÓ</label>
-                    <input type="text" class="form-control" value="<?php echo pon_diagonal($reporte['fecha_levanta']) ?>" disabled>
+                    <input type="text" class="form-control" value="<?php echo pon_diagonal($reporte['fecha_levanta']); ?>" disabled>
                     <label for="">PERSONAL QUE LEVANTÓ</label>
                     <input type="text" class="form-control" value="<?php echo $reporte['personal_levanta']; ?>" disabled>
                 </div> 

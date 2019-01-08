@@ -106,7 +106,7 @@ if($usuario['esadmin']!=1){?>
         if(mensaje){
             var seguridad = confirm("¿Realmente esta seguro?");
             if(seguridad){
-
+                alert("La base de datos de Reportes ha sido eliminada");
             }
             else{
             event.preventDefault();

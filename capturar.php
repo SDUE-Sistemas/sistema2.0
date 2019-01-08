@@ -203,8 +203,13 @@ $n = sizeof($nr);
         }
         else{
             var d = new Date();
-            fecha.value=d.getFullYear() + "" + (d.getMonth() +1) + "" + d.getDate();
-            
+            var a=d.getFullYear();
+            var m=d.getMonth()+1;
+            var xd=d.getDate();
+            if(m<10) m='0'+m;
+            if(xd<10) xd='0'+xd;
+            fecha.value=a + "" +m+ "" + xd;
+                
         }
         }
         //funcion para el boton cancel

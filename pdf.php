@@ -52,7 +52,7 @@ $pdf->Image('img/LogoHorizontal.png',160,6,46,15);
 $pdf->Image('img/SDUE.png',10,6,46,15);
 $pdf->Cell(180,33,'SECRETARIA DE DESARROLLO URBANO Y ECOLOGIA',0, 1 ,'C');
 $pdf->Ln(-8);
-$pdf->Cell(0, 0,'ÁREA DE SISTEMAS',0,0, 'C');
+$pdf->Cell(0, 0,'AREA DE SISTEMAS',0,0, 'C');
 $pdf->Ln(8);
 $pdf->Ln(5);
 $pdf->Cell(100, 0,$folio);
@@ -79,7 +79,7 @@ $pdf->Cell(10,5,"",1 , 0, "L" , true);
 }else{
   $pdf->Cell(10,5,"",1 , 0);
 }
-$pdf->Cell(30,5,"CAPACITACIÓN",0 , 0);
+$pdf->Cell(30,5,"CAPACITACION",0 , 0);
 if($reporte['causa']=="CAPACITACION"){
   $pdf->Cell(10,5,"",1 , 0, "L" , true);
   }else{

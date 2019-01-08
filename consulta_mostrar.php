@@ -5,7 +5,7 @@ require_once("librerias/control_usuario.php");
 require_once('librerias/elimina_acentos.php');
 require_once('librerias/info.php');
 $query="SELECT folio, asunto, usuario, fecha_levanta, fecha_atiende, personal_levanta, personal_atiende, area, detalles, causa, estado FROM reportes";
-$ejem="SELECT folio, asunto, usuario, fecha_levanta, fecha_atiende, personal_levanta, personal_atiende, area, detalles, causa, estado FROM reportes";
+$ejem=$query;
 if(isset($_POST['folio'])){
 
     $query .=" WHERE folio LIKE '".$_POST['folio']."'";
