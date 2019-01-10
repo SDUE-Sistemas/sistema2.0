@@ -1,4 +1,5 @@
 <?php  
+//Informacion necesaria para poder ingresar al localhost y hacer cambios en la base de datos
     $host = 'localhost';
     $database = 'sistemas';
     $username = 'root';
@@ -12,3 +13,5 @@
         exit();
     }
 ?>
+
+<!-- Creado por Brayan Prieto && Angel Vega 2018-2019 xd-->

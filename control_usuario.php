@@ -24,3 +24,5 @@ $nr = $statement->fetchAll();
 $statement->closeCursor();
 $n = sizeof($nr);
 ?>
+
+<!-- Creado por Brayan Prieto && Angel Vega 2018-2019 xd-->

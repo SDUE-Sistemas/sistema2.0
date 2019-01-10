@@ -1,6 +1,7 @@
 <?php
 function elimina_acentos($text)
     {
+            //Funcion que nos elimina los acentos y caracteres raros xD
         $text = htmlentities($text, ENT_QUOTES, 'UTF-8');
         $text = strtolower($text);
         $patron = array (
@@ -57,10 +58,12 @@ function elimina_acentos($text)
         return $text;
 }
 function quita_diagonal($cadena_sucia){
+        //Funcion que quita las diagonales y devuelve la cadena como limpia
         $cadena_limpia=str_replace('/', '', $cadena_sucia);
         return $cadena_limpia;
 }
 function pon_diagonal($str_sin_diagonal){
+        //Funcion que pone Diagonales a la Fecha y nos cambia el dia del mes por su nombre
         $str_con_diagonal =substr($str_sin_diagonal,0,4);
         $str_con_diagonal .="/";
         /*$str_con_diagonal .=*/
@@ -94,6 +97,7 @@ function pon_diagonal($str_sin_diagonal){
         return $str_con_diagonal;
 }
 function pon_diagonal_xd($str_sin_diagonal){
+        //Funcion que pone diagonal pero sin cambiar el dia del mes
         $str_con_diagonal =substr($str_sin_diagonal,0,4);
         $str_con_diagonal .="/";
         $str_con_diagonal .=substr($str_sin_diagonal,4,2);
@@ -102,7 +106,7 @@ function pon_diagonal_xd($str_sin_diagonal){
         return $str_con_diagonal;
 }
 function contarFilas($arreglo){
-
+        //Funcion que usamos en el excel para contar las filas que se necesitan para generarlas
         $cantidad = 0;
      
         foreach($arreglo as $elemento){
@@ -112,3 +116,5 @@ function contarFilas($arreglo){
         return $cantidad;
      }
 ?>
+
+<!-- Creado por Brayan Prieto && Angel Vega 2018-2019 xd-->
