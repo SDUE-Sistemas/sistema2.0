@@ -1,5 +1,5 @@
 <?php
-
+//Libreiras para Base de Datos y Modificar cadena de caracteres
 require_once("librerias/info.php");
 
 require_once('librerias/elimina_acentos.php');
@@ -11,6 +11,7 @@ $code=$_POST['code'];
 
 
 if($code==1){
+    //Si solo hay un reporte
     $statement = $db->prepare($query);
     $statement->execute();
     $reporte = $statement->fetch();
@@ -18,17 +19,18 @@ if($code==1){
     $filas=1;
 }
 elseif($code==0){
+    //existe mas de un reporte
     $statement = $db->prepare($query);
     $statement->execute();
     $reportes = $statement->fetchAll();
     $statement->closeCursor();
     $filas=contarFilas($reportes);
 }
-
+//libreria para generar el Excel
 require_once('Classes/PHPExcel.php');
 
 $hoja = new PHPExcel();
-
+//Dar formato al Excel
 $hoja->getProperties()
 ->setCreator("Oficina de sistemas")
 ->setTitle("")
@@ -53,7 +55,7 @@ $hoja->getActiveSheet()->setCellValue('H1', 'OBSERVACIONES');
 $hoja->getActiveSheet()->setCellValue('I1', 'CAUSA');
 $c=2;
 if(isset($reportes)){
-    
+    //Si hay varios reportes se hace un ciclo para imprimirlos todos
     foreach($reportes as $reporte){
         $hoja->getActiveSheet()->setCellValue('A'.$c, $reporte['folio']);
         $hoja->getActiveSheet()->setCellValue('B'.$c, $reporte['asunto']);
@@ -81,10 +83,11 @@ if(isset($reportes)){
             $hoja->getActiveSheet()->setCellValue('I'.$c,'N/T');
         }
         
-        $c=$c+1;
+        $c++;
     }
 
 }else{
+    //En caso de que solo sea uno el que se desea generar excel
     $hoja->getActiveSheet()->setCellValue('A'.$c, $reporte['folio']);
         $hoja->getActiveSheet()->setCellValue('B'.$c, $reporte['asunto']);
         $hoja->getActiveSheet()->setCellValue('C'.$c, pon_diagonal($reporte['fecha_levanta']));
@@ -121,3 +124,6 @@ $hoja = PHPExcel_IOFactory::createWriter($hoja, 'Excel2007');
 $hoja ->save('php://output');
 
 ?>
+
+
+<!-- Creado por Brayan Prieto && Angel Vega 2018-2019 -->

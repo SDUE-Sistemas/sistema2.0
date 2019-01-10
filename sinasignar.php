@@ -1,8 +1,10 @@
 <?php
+//librerias para el Login,Base de datos y para modificar las cadenas de caracteres
 include_once("librerias/control_usuario.php");
 include_once("librerias/info.php");
 include_once("librerias/elimina_acentos.php");
 $a = "DEJAR A CRITERIO DE UN ADMINISTRADOR";
+//Se buscan todos los reportes que estan como Dejar a criterio del administrador
 $query = "SELECT folio, usuario, personal_levanta, area, fecha_levanta, asunto FROM reportes WHERE personal_atiende='".$a."' AND estado = 0";
 $statement = $db->prepare($query);
 $statement->execute();
@@ -24,6 +26,7 @@ $statement->closeCursor();
     <script src="librerias/calendario.js"></script>
     <script>
         $(function () {
+            //Funcion para las fechas
         $(".fecha").datepicker();
         });
     </script>
@@ -44,6 +47,7 @@ $statement->closeCursor();
         <a href="logout.php" id="salir">SALIR</a>
         <script>
             salir.onclick=function(){
+                //Funcion para desloguearse del Sistemas
                 var mensaje = confirm("¿Seguro que desea salir?");
                 if(!mensaje){
                     event.preventDefault();
@@ -66,6 +70,7 @@ $statement->closeCursor();
 
         <?php 
         if(empty($reportes)){
+            //En caso de que no existan reportes que esten como dejar a criterio de un administrador
         echo "<div align='center'><h1>No hay reportes sin asignar</h1></div>";
         }
         foreach($reportes as $reporte):?>
@@ -101,6 +106,7 @@ $statement->closeCursor();
             $statement->closeCursor();
             ?>
                 <!-- Desplegable  Ciclo For QUIEN ATIENDE-->
+            <!-- Desplegable que es lo unico que esta habilitado para asignar un reporte a algun usuario o personal -->
                 <select class="form-control" name="personal_atiende" >
                     <option>DEJAR A CRITERIO DE UN ADMINISTRADOR</option>
                 <?php  foreach($personals as $personal): ?>
@@ -112,11 +118,11 @@ $statement->closeCursor();
             <br>
         <div class="row" align="center">
 
-
+        <!-- Se envia el fomrulario para guardar los cambios -->
         <div class="col"> <button type="submit" class="btn btn-outline-primary" form="form<?php echo $reporte['folio'];?>">GUARDAR</button> </div>
 
         </form>
-        
+        <!-- Boton modificar en caso de que existan algun error o necesite realizarse algun cambio -->
         <div class="col">  <form action="modificar.php" method="post">
                      <input name="folio" value="<?php echo $reporte['folio'];?>" hidden>
                      <button type="submit" class="btn btn-outline-primary">MODIFICAR</button>
@@ -128,3 +134,6 @@ $statement->closeCursor();
     
 </body>
 </html>
+
+
+<!-- Creado por Brayan Prieto && Angel Vega 2018-2019 -->

@@ -53,7 +53,7 @@ $n = sizeof($nr);
 <body>
 
 <!--encabezado-->
-    
+    <!-- Menu -->
     <div class="scrollmenu">
       <ul class="nav">
         <a href="capturar.php">CAPTURAR</a>
@@ -71,6 +71,7 @@ $n = sizeof($nr);
         <a href="terminar.php">TERMINAR CAPTURAS (<?php echo $n?>)</a>
         <?php if($usuario['esadmin']==1){ ?>
         <a href="admin.php">ADMIN</a><?php } ?>
+        <!-- funcion para desloguearte del Sistema -->
         <a href="logout.php" id="salir">SALIR</a>
         <script>
             salir.onclick=function(){
@@ -112,32 +113,43 @@ $n = sizeof($nr);
     </div>
 </div>
 
+    
     <script Language="JavaScript">
         agregar.onclick=function(){
+        //Funcion para verificar que los campos no estan vacios al dar clic en Aceptar
             if(usuario.value=="" | pass.value==""){
+                //Si hay campos vacios no manda el formulario
                 alert("No puede dejar campos vacios");
                 event.preventDefault();
             }else{
+                //No hay campos vacios, manda el formulario
             alert("Usuario Agregado ");
             }
         }
+        
         cancelar.onclick=function(){
+            //Funcion para cancelar y vaciar los campos que se llenaron al dar clic en Cancelar
                 var mensaje=confirm("¿Seguro que desea cancelar?");
                 if(mensaje){
+                    //Si se acepta la advertencia vacia los campos
                     usuario.value=""
                     pass.value="";
                     esadmiin.checked=false;
                     event.preventDefault();
                 }else{
+                    //No se acepta se queda igual
                     event.preventDefault();
                 }
             }
         volver.onclick=function(){
+        //Funcion para volver a la pagina de Administrador al dar clic en Volver
             var mensaje = confirm("¿Seguro que desea volver?");
             if(mensaje){
+                //Si se acepta nos devuelve a la pagina de admin
             event.preventDefault();
             location.href="admin.php";
             }else{
+                //Se cancela nos deja en la misma pagina
             event.preventDefault();
             }
 
@@ -145,4 +157,7 @@ $n = sizeof($nr);
     </script>
 </body>
 </html>
+
+
+<!-- Creado por Brayan Prieto && Angel Vega 2018-2019 -->
 <!-- END -->

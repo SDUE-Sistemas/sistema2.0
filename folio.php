@@ -1,5 +1,7 @@
  <?php
+ //Librerias
      include_once('librerias/info.php');
+     //Tomando el ultimo Folio agregado para mostrarlo en la pantalla
      $query = "SELECT folio FROM reportes WHERE folio = (SELECT max(folio) FROM reportes)";
      $statement = $db->prepare($query);
      $statement->execute();
@@ -100,3 +102,6 @@
         
      </body>
  </html>
+ 
+
+<!-- Creado por Brayan Prieto && Angel Vega 2018-2019 -->

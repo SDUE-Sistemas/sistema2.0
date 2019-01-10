@@ -1,11 +1,14 @@
 <?php
+//Libreiras del Login,Base de datos y para modificar las cadenas de caracteres
 include_once("librerias/info.php");
 require_once("librerias/control_usuario.php");
 require_once("librerias/elimina_acentos.php");
+//Creando variables para guardar los cambios de un reporte que se termino;
 $detalles=elimina_acentos($_POST['detalles']);
 $fecha_atiende=quita_diagonal($_POST['fecha']);
 $causa=$_POST['causa'];
 $folio=$_POST['folio'];
+//Haciendo la query para hacer los cambios
 $query="UPDATE reportes 
         SET detalles = '".strtoupper($detalles)."', fecha_atiende ='".$fecha_atiende."', causa = '".$causa."', estado = 1 WHERE folio = $folio";
     $statement = $db->prepare($query); 
@@ -31,8 +34,12 @@ $query="UPDATE reportes
 <script>
 
 window.onload= function(){
+    //Mandamos a llamar a otro formulario automaticamente
     document.forms["main"].submit();
 
 } 
 
 </script>
+
+
+<!-- Creado por Brayan Prieto && Angel Vega 2018-2019 -->

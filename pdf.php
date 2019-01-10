@@ -1,13 +1,17 @@
 <?php
+//Se obtiene el folio del reporte que se quiere generar
 $folio=$_GET['folio'];
+//Librerias
 include_once('librerias/info.php');
 include_once('librerias/elimina_acentos.php');
+//Se seleccionan todos los datos del reporte
 $query = "SELECT folio, estado, asunto, usuario, fecha_levanta, fecha_atiende, personal_levanta, personal_atiende, area, detalles, causa FROM reportes WHERE folio LIKE $folio";
 $statement = $db->prepare($query);
 $statement->execute();
 $reporte = $statement->fetch();
 $statement->closeCursor();
 
+//Creamos variables para darle formato al PDF
 $folio="FOLIO: ";
 $folio .=$reporte['folio'];
 
@@ -18,11 +22,13 @@ $fecha_l=pon_diagonal($reporte['fecha_levanta']);
 
 
 $fecha_a="FECHA DE ATENCION: ";
+//Verificamos si esta el reporte terminado buscando la fecha en que se atendio
 if(!empty($reporte['fecha_atiende'])){
 $fecha_a .=pon_diagonal($reporte['fecha_atiende']);
 }else{
 $fecha_a .="";
 }
+//Mas variables para dar formato al PDF
 $usuario="USUARIO: ";
 $usuario .=$reporte['usuario'];
 
@@ -38,15 +44,17 @@ $detalles="";
 
 $detalles .=$reporte['detalles'];
 
+//Si el reporte no esta terminado se creara un espacio para escribir los detalles ahi mismo
 if(empty($detalles)){
 $obser="____________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________";
 }else{
   $obser=$detalles;
 }
-
+//Utilizamos una libreria para crear el PDF
 require('fpdf/fpdf.php');
 $pdf = new FPDF();
 $pdf->AddPage();
+//Vamos agregando datos para darle formato al PDF
 $pdf->SetFont('Arial','I',10);
 $pdf->Image('img/LogoHorizontal.png',160,6,46,15);
 $pdf->Image('img/SDUE.png',10,6,46,15);
@@ -55,6 +63,7 @@ $pdf->Ln(-8);
 $pdf->Cell(0, 0,'AREA DE SISTEMAS',0,0, 'C');
 $pdf->Ln(8);
 $pdf->Ln(5);
+//Aqui empezamos a agregar todos los datos que se tienen del reporte que se decidio generar el PDF
 $pdf->Cell(100, 0,$folio);
 $pdf->Cell(0, 0,$fecha_l);
 $pdf->Ln(8);
@@ -99,13 +108,15 @@ if($reporte['causa']=="SEDU"){
   }
 $pdf->Ln(10);
 $pdf->Cell(100,5,$fecha_a);
-if($reporte['estado']==0){
 $pdf->Ln(12);
 $pdf->Cell(100,0,"FIRMA DEL USUARIO:");
 $pdf->Cell(100,0,"FIRMA DEL PERSONAL:");
 $pdf->Ln(8);
 $pdf->Cell(100,0,"________________________");
 $pdf->Cell(100,0,"________________________");
-}
+
 $pdf->Output();
 ?>
+
+
+<!-- Creado por Brayan Prieto && Angel Vega 2018-2019 -->

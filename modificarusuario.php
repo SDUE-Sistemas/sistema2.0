@@ -143,17 +143,22 @@ $n = sizeof($nr);
 
     <script Language="JavaScript">
         agregar.onclick=function(){
+           //Verificando que los campos que estaban habilitados no esten vacios
            if(pa.checked==true && password.value=="" || na.checked==true && nombre.value==""){
+            //Verdaderamente los campos estan vacios
             alert("Hay campos vacios");
             event.preventDefault();
            }else{
+               //Los campos habilitados si estaban llenos y se guardaron los cambios
             alert("Los cambios fueron realizados");
            }
            
         }
         cancelar.onclick=function(){
                 var mensaje=confirm("¿Seguro que desea cancelar?");
+                //Funcion para verificar si nse quieren cancelar los datos
                 if(mensaje){
+                    //Nos vacia todos los campos que se tenian
                     nombre.value=""
                     password.value="";
                     na.checked=true;
@@ -162,30 +167,38 @@ $n = sizeof($nr);
                     password.disabled=false;
                     event.preventDefault();
                 }else{
+                    //Si la advertencia se niega , nos deja los campos como estaban
                     event.preventDefault();
                 }
             }
         volver.onclick=function(){
             var mensaje = confirm("¿Seguro que desea volver?");
+            //Funcion que nos permite volver
             if(mensaje){
+                //Si se acepta nos devuelve a la pagina anterior
             event.preventDefault();
             location.href="admin.php";
             }else{
+                //Si se niega nos permite permanecer en la pagina actual
             event.preventDefault();
             }
         }
         na.onclick=function(){
         if(na.checked==true){
+            //Si se habilita el cuadro de nombre se habilita el campo
         nombre.disabled=false;
         }else{
+            //Se deshabilita el cuadro, se deshabilita el campo
         nombre.disabled=true;
         }
         }
 
         pa.onclick=function(){
         if(pa.checked==true){
+            //Si se habilita el cuadro de password, se habilita el campo
         password.disabled=false;
         }else{
+            //Se deshabilita el cuadro, se deshabilita el campo
         password.disabled=true;
         }
         }
@@ -194,9 +207,14 @@ $n = sizeof($nr);
             var x = document.getElementById("usuario").value;
             var p = document.getElementById("abcd").value;
             p = p.toUpperCase();
+            //
             if(x==p){
+                //Funcion para que el administrador que esta modificando no se pueda quitar el administrador y no 
+                //exista la posibilidad de que en algun momento el Sistema se quede sin administradores
+            esadmiin.disabled=true;
             esadmiin.checked=true;
             }else{
+                //Si el usuario no se esta modificando a el mismo si se puede poner o quitar el administrador
             esadmiin.disabled=false;
             esadmiin.checked=false;
             }
@@ -205,4 +223,6 @@ $n = sizeof($nr);
     </script>
 </body>
 </html>
-<!-- END -->
+
+
+<!-- Creado por Brayan Prieto && Angel Vega 2018-2019 -->

@@ -1,11 +1,13 @@
 
 <!--sacar los datos de los reportes que vamos a consultar -->
 <?php
+//Librerias de Usuario, Base de Datos y Modificar cadenas de Caracteres
 require_once("librerias/control_usuario.php");
 require_once('librerias/elimina_acentos.php');
 require_once('librerias/info.php');
 $query="SELECT folio, asunto, usuario, fecha_levanta, fecha_atiende, personal_levanta, personal_atiende, area, detalles, causa, estado FROM reportes";
 $ejem=$query;
+//Verificando si la consulta se va a realizar por Folio, entonces no necesita informacion extra ya que este es unico
 if(isset($_POST['folio'])){
 
     $query .=" WHERE folio LIKE '".$_POST['folio']."'";
@@ -17,12 +19,14 @@ if(isset($_POST['folio'])){
     $code=1;
 
 }else{
-    
+    //Si no se busca por Folio, se comienza a verificar que datos se llenaron para realizar la Consulta
     if(isset($_POST['area'])){
+        //Si el campo de Area se habilito
         $query .=" WHERE area LIKE '".$_POST['area']."'";
 
     }
     if(isset($_POST['personal'])){
+        //Si el campo de Personal se habilito
         if($query==$ejem){
             $query .=" WHERE personal_atiende LIKE '".$_POST['personal']."'";
         }else{
@@ -32,6 +36,7 @@ if(isset($_POST['folio'])){
 
     }
     if(isset($_POST['fecha1'])&&!empty($_POST['fecha2'])){
+        //Si solo se lleno un campo de una Fecha
         $x=$_POST['fecha1'];
             $x=quita_diagonal($x); 
             $fecha1=0 + $x;
@@ -42,12 +47,14 @@ if(isset($_POST['folio'])){
             
         if($query==$ejem){
             if($fecha2<$fecha1){
+                //Si las fechas estan intercambiadas se ordenan del dia menor al dia mayor
                 $query .=" WHERE fecha_atiende BETWEEN '".$fecha2."' AND '".$fecha1."'";
             }else{
             $query .=" WHERE fecha_atiende BETWEEN '".$fecha1."' AND '".$fecha2."'";
             }
         }else{
             if($fecha2<$fecha1){
+                //Si las fechas estan intercambiadas se ordenan del dia menor al dia mayor
                 $query .=" AND fecha_atiende BETWEEN '".$fecha2."' AND '".$fecha1."'";   
             }else{
                 $query .=" AND fecha_atiende BETWEEN '".$fecha1."' AND '".$fecha2."'";
@@ -56,6 +63,7 @@ if(isset($_POST['folio'])){
 
     }
     if(isset($_POST['usuario'])){
+        //Si el campo de Usuario se habilito
         if($query==$ejem){
             $query .=" WHERE usuario LIKE '".$_POST['usuario']."'";
         }else{
@@ -64,6 +72,7 @@ if(isset($_POST['folio'])){
 
     }
     if(isset($_POST['causa'])){
+        //Si el campo de la causa se habilito
         if($query==$ejem){
             $query .=" WHERE causa LIKE '".$_POST['causa']."'";
         }else{
@@ -117,6 +126,7 @@ if(isset($_POST['folio'])){
         <a href="logout.php" id="salir">SALIR</a>
         <script>
             salir.onclick=function(){
+                //Funcion para desloguearse 
                 var mensaje = confirm("¿Seguro que desea salir?");
                 if(!mensaje){
                     event.preventDefault();
@@ -139,9 +149,11 @@ if(isset($_POST['folio'])){
     <?php
     
     if($code==1){
-        
+        //Si hay reportes con las especificaciones que se pidieron las muestra
         if(!empty($reporte)){
+
             if($reporte['estado']==0){ ?>
+            <!-- Botones para generar excel y devolvernos a la pagina para hacer una consulta -->
 <button class="btn btn-outline-primary" id="volver">VOLVER</button>
 <form action="excel.php" method="post">
         <input type="text" name="query" value="<?php echo $query ?>" hidden>
@@ -149,6 +161,10 @@ if(isset($_POST['folio'])){
     <button class="btn btn-outline-primary" type="submit"> GENERAR EN EXCEL </button>
     </form>
 
+                <!-- LOS REPORTES SE MUESTRAN POR ORDEN DE FOLIO -->
+                <!-- Aqui muestra los reportes sin atender,y no muestra los campos de Fecha de Atencion,
+                Detalles y la Causa del Reporte
+                -->
                 <a href="pdf.php?folio=<?php echo $reporte['folio'];?>" role="button" class="btn btn-outline-primary">PDF </a>
         <div class="row">
             <div class="col">
@@ -172,12 +188,16 @@ if(isset($_POST['folio'])){
                 <label for="">ÁREA</label>
                 <input class="form-control" value="<?php echo $reporte['area']; ?>" type="text" disabled>
                 <h1>Aún sin atender</h1>
-                
+                <!-- Opcion de generar PDF -->
+                <a href="pdf.php?folio=<?php echo $reporte['folio'];?>" role="button" class="btn btn-outline-primary">PDF </a>
             </div>
         </div>
         <br>
             <?php }else{
         ?>
+        <!-- Botones para generar excel y devolvernos a la pagina para hacer una consulta -->
+        <!-- Aqui muestra los reportes que estan atendidos y muestra los campos de Fecha de Atencion,
+                Detalles y la Causa del Reporte -->
         <button class="btn btn-outline-primary" id="volver">VOLVER</button>
         <form action="excel.php" method="post">
         <input type="text" name="query" value="<?php echo $query ?>" hidden>
@@ -210,6 +230,9 @@ if(isset($_POST['folio'])){
                 <textarea style="font-family: Gotham-Book;"class="form-control" type="text" disabled><?php echo $reporte['detalles']; ?></textarea>
                 <label for="">CAUSA</label>
                 <input class="form-control" value="<?php echo $reporte['causa']; ?>" type="text" disabled>
+                <br>
+                <!-- Boton para generar el PDF de el reporte que se desea -->
+                <a href="pdf.php?folio=<?php echo $reporte['folio'];?>" role="button" class="btn btn-outline-primary">PDF </a>
             </div>
         </div>
         <br>
@@ -217,8 +240,8 @@ if(isset($_POST['folio'])){
     <?php 
             }    
 }else{
-        
-    ?>  <div align="center">  <h1>no se encontro nada</h1>  </div><?php
+        //No se encontraron reportes deacuerdo a las caracteristicas de la consulta
+    ?>  <div align="center">  <h1>NO SE ENCONTRARON REPORTES</h1>  </div><?php
     }
     
 }else{
@@ -234,6 +257,7 @@ if(isset($_POST['folio'])){
     foreach ($reportes as $reporte){
        if($reporte['estado']==1){
         ?>
+        <!--Si se encontraron reportes -->
         <div class="row">
             <div class="col">
             <!-- si hay folio-->
@@ -263,11 +287,13 @@ if(isset($_POST['folio'])){
                 <a href="pdf.php?folio=<?php echo $reporte['folio'];?>" role="button" class="btn btn-outline-primary">PDF </a>
             </div>
         </div>
-        <hr/>
+        
+        <hr/> <!-- Aqui ponemos un separador entre reporte para no confundirlos y tener un mejor orden -->
         <br>
 
         <?php 
        }else{ ?>
+       <!-- Si se encontro reporte pero no esta terminado -->
         <div class="row">
             <div class="col">
             <!-- si hay folio-->
@@ -294,15 +320,16 @@ if(isset($_POST['folio'])){
                 <a href="pdf.php?folio=<?php echo $reporte['folio'];?>" role="button" class="btn btn-outline-primary">PDF </a>
             </div>
         </div>
-        <hr/>
+        <hr/> <!-- Aqui ponemos un separador entre reporte para no confundirlos y tener un mejor orden -->
         <br>
        <?php }
         }
         
     }else{
     ?>    
+    <!-- No se encontraron reportes deacuerdo a las especificaciones pedidas-->
     <div align="center">  
-    <h1>NO SE ENCONTRÓ NADA</h1>  
+    <h1>NO SE ENCONTRARON REPORTES</h1>  
     <br>
     <button class="btn btn-outline-primary" id="volver">VOLVER</button>
     
@@ -313,8 +340,12 @@ if(isset($_POST['folio'])){
     </div>
    <script>
    volver.onclick= function(){
+        //Funcion que nos regresa a la pagina de consultas
         location.href="consulta.php";
    }
    </script>
 </body>
 </html>
+
+
+<!-- Creado por Brayan Prieto && Angel Vega 2018-2019 -->

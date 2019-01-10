@@ -77,7 +77,7 @@
     <script src="js/bootstrap.min.js"></script>
     <script>
       entrar.onclick=function () {
-        
+        //En caso de que no se llene algun campo manda advertencia de que hay campos vacios
         if(usuario.value=="" ||  pass.value==""){
          alert("CAMPOS VACIOS");
          event.preventDefault();
@@ -90,3 +90,5 @@
     </script>
 </body>
 </html>
+
+<!-- Creado por Brayan Prieto && Angel Vega 2018-2019 -->

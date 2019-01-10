@@ -74,6 +74,7 @@ $n = sizeof($nr);
         <a href="logout.php" id="salir">SALIR</a>
         <script>
             salir.onclick=function(){
+                //Funcion para desloguearse
                 var mensaje = confirm("¿Seguro que desea salir?");
                 if(!mensaje){
                     event.preventDefault();
@@ -123,19 +124,25 @@ $n = sizeof($nr);
     <script Language="JavaScript">
        eliminar.onclick=function(){
            var mensaje = confirm("¿Seguro que desea eliminar este Usuario?");
+           //Advertencia para eliminar usuario
             if(mensaje){
+                //Se acepto se elimina
             alert("Usuario eliminado con exito");
             }
             else{
+                //Se denego no se elimina
             event.preventDefault();
             }
        }
         volver.onclick=function(){
             var mensaje = confirm("¿Seguro que desea volver?");
+            //Funcion para volver a la pagina anterior
             if(mensaje){
+                //Se acepta devuelve
                 event.preventDefault();
                 location.href="admin.php";
             }else{
+                //se denego se queda en la pagina actual
             event.preventDefault();
             }
 
@@ -143,4 +150,5 @@ $n = sizeof($nr);
     </script>
 </body>
 </html>
-<!-- END -->
+
+<!-- Creado por Brayan Prieto && Angel Vega 2018-2019 xd-->

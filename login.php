@@ -14,3 +14,4 @@ header('Location: capturar.php');
     //si no nos mandaron los datos lo devolvemos al index
     header('Location: index.php');
 }
+//Creado por Brayan Prieto && Angel Vega

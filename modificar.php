@@ -306,11 +306,13 @@ $statement->closeCursor();
     var y = document.getElementById("b").value;
     if(x==y){
         if(detalles.value == "" || asunto.value=="" || usuario.value==""){
+            //Funcion que manda una advertencia de que los campos estan vacios
             alert("No puede dejar campos vacios");
             event.preventDefault();
         }
     }
     else if(x!=y && asunto.value=="" || usuario.value==""){
+    //Funcion que devuelve advertencia para que se llenen todos los campos
     alert("Llene todos los campos");
     event.preventDefault();
     }
@@ -320,3 +322,6 @@ $statement->closeCursor();
         </script>
 </body>
 </html>
+
+
+<!-- Creado por Brayan Prieto && Angel Vega 2018-2019 -->

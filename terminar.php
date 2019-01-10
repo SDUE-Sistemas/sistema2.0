@@ -1,7 +1,9 @@
 <?php
+//Librerias del Login, Base de datos y para modificar las cadenas de caracteres
 include_once("librerias/control_usuario.php");
 include_once("librerias/info.php");
 include_once("librerias/elimina_acentos.php");
+//Seleccionando los reportes que estan asignados a tu usuario
 $query = "SELECT folio, usuario, personal_levanta, area, fecha_levanta, asunto FROM reportes WHERE personal_atiende='".$user."' AND estado = 0";
 $statement = $db->prepare($query);
 $statement->execute();
@@ -23,6 +25,7 @@ $statement->closeCursor();
     <script src="librerias/calendario.js"></script>
     <script>
         $(function () {
+            //Funcion para las fechas
         $(".fecha").datepicker();
         });
     </script>
@@ -43,6 +46,7 @@ $statement->closeCursor();
         <a href="logout.php" id="salir">SALIR</a>
         <script>
             salir.onclick=function(){
+                //Funcion para desloguearse
                 var mensaje = confirm("¿Seguro que desea salir?");
                 if(!mensaje){
                     event.preventDefault();
@@ -65,9 +69,11 @@ $statement->closeCursor();
 
         <?php 
         if(empty($reportes)){
+            //En caso de que no se tengan reportes asignados 
         echo "<div align='center'><h1>No tiene reportes sin atender</h1></div>";
         }
         foreach($reportes as $reporte):?>
+        <!-- Hay reportes sin terminar -->
         <form action="terminar_r.php" method="post" id="form<?php echo $reporte['folio'];?>">
             <div class="row">
                 <div class="col">
@@ -121,7 +127,7 @@ $statement->closeCursor();
         <div class="col"> <button type="submit" id="btn<?php echo $reporte['folio']?>" class="btn btn-outline-primary" form="form<?php echo $reporte['folio'];?>">GUARDAR</button> </div>
 
         </form>
-        
+        <!-- Boton en caso que se necesite realizar algun cambio en algun reporte -->
         <div class="col">  <form action="modificar.php" method="post">
                      <input name="folio" value="<?php echo $reporte['folio'];?>" hidden>
                      <button type="submit" class="btn btn-outline-primary">MODIFICAR</button>
@@ -135,7 +141,7 @@ $statement->closeCursor();
         btn<?php echo $reporte['folio']; ?>.onclick = function(){
 
             if(detalles<?php echo $reporte['folio']; ?>.value=="" || fecha<?php echo $reporte['folio']; ?>.value=="" ){
-
+                //Funcion que manda una alerta en caso de que algun campo no este llenado
                 alert("revise que todos los campos esten llenos");
                 event.preventDefault();
             }
@@ -145,3 +151,6 @@ $statement->closeCursor();
     </script>
 </body>
 </html>
+
+
+<!-- Creado por Brayan Prieto && Angel Vega 2018-2019 -->

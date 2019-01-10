@@ -71,6 +71,7 @@ $n = sizeof($nr);
         <a href="terminar.php">TERMINAR CAPTURAS (<?php echo $n?>)</a>
         <?php if($usuario['esadmin']==1){ ?>
         <a href="admin.php">ADMIN</a><?php } ?>
+        <!-- Funcion para desloguearte del Sistema -->
         <a href="logout.php" id="salir">SALIR</a>
         <script>
             salir.onclick=function(){
@@ -202,10 +203,13 @@ $n = sizeof($nr);
             event.preventDefault();
         }
         else{
+            //Obteniendo los datos de la fecha en que se captura el reporte
             var d = new Date();
             var a=d.getFullYear();
             var m=d.getMonth()+1;
             var xd=d.getDate();
+            //En caso de que el dia y el mes no sean mayores a 10, se les agrega un cero para no tener problema con las demas
+            //funciones del Sistema que usan esta fecha 
             if(m<10) m='0'+m;
             if(xd<10) xd='0'+xd;
             fecha.value=a + "" +m+ "" + xd;
@@ -225,4 +229,5 @@ $n = sizeof($nr);
     </script>
 </body>
 </html>
-<!-- END -->
+
+<!-- Creado por Brayan Prieto && Angel Vega 2018-2019 -->

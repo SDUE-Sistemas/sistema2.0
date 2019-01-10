@@ -1,7 +1,8 @@
 <?php 
-
+//Libreria del Login
 include_once("librerias/control_usuario.php");
 
+//Verificando que sea Admnistrador para poder entrar
 if($usuario['esadmin']!=1){?>
    <script>
    var mensaje = alert("No puede acceder, USTED NO ES ADMINISTRADOR.");
@@ -28,7 +29,7 @@ if($usuario['esadmin']!=1){?>
 <body>
 
 <!--encabezado-->
-    
+    <!-- Menu -->
     <div class="scrollmenu">
       <ul class="nav">
         <a href="capturar.php">CAPTURAR</a>
@@ -46,6 +47,7 @@ if($usuario['esadmin']!=1){?>
         <a href="terminar.php">TERMINAR CAPTURAS (<?php echo $n?>)</a>
         <?php if($usuario['esadmin']==1){ ?>
         <a href="admin.php">ADMIN</a><?php } ?>
+        <!-- Funcion para salir del Sistema -->
         <a href="logout.php" id="salir">SALIR</a>
         <script>
             salir.onclick=function(){
@@ -100,6 +102,7 @@ if($usuario['esadmin']!=1){?>
           </div>
     </div>
   </div>
+  <!-- Advertencia para verificar si realmente se quiere eliminar la Base de Datos -->
 <script>
     vaciars.onclick=function(){
         var mensaje = confirm("La Base de Datos de Reportes se vaciara, y los datos ya no se podran recuperar");
@@ -125,4 +128,6 @@ if($usuario['esadmin']!=1){?>
 
 </body>
 </html>
-<!-- END -->
+
+
+<!-- Creado por Brayan Prieto && Angel Vega 2018-2019 -->

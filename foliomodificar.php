@@ -1,4 +1,5 @@
 <?php
+    //Librerias para base de datos y eliminar acentos
      include_once('librerias/info.php');
      include_once('librerias/elimina_acentos.php');
      if(!empty($_POST['folio'])){
@@ -6,6 +7,7 @@
      }else{
       $folio = $_GET['folio'];
      }
+     //Seleccionando los datos de un reporte que acaba de ser modificado para mostrarlo en la pantalla
      $query = "SELECT folio FROM reportes WHERE folio LIKE $folio";
      $statement = $db->prepare($query);
      $statement->execute();
@@ -164,3 +166,6 @@
         
      </body>
  </html>
+ 
+
+<!-- Creado por Brayan Prieto && Angel Vega 2018-2019 -->

@@ -1,4 +1,5 @@
 <?php 
+//Libreria para loguearse
 include_once("librerias/control_usuario.php");
 ?>
 <!--html-->
@@ -20,6 +21,7 @@ include_once("librerias/control_usuario.php");
     <script src="jq/jquery-ui.js"></script>
     <script src="librerias/calendario.js"></script>
     <script>
+    //Funcion para las fechas
         $(function () {
         $("#fecha").datepicker();
         });
@@ -51,6 +53,7 @@ include_once("librerias/control_usuario.php");
         <a href="logout.php" id="salir">SALIR</a>
         <script>
             salir.onclick=function(){
+                //Funcion para desloguearse
                 var mensaje = confirm("¿Seguro que desea salir?");
                 if(!mensaje){
                     event.preventDefault();
@@ -74,17 +77,18 @@ include_once("librerias/control_usuario.php");
                 <div class="col" align="center">
                     <label for="">FOLIO</label>
                         <input type="checkbox" name="" id="chkfolio" onchange="checkFolio(this);">
-                    
+                        <!-- Boton que nos habilita para buscar un reporte por su Folio, pero no deja habilitar mas campos -->
                     <input  style="text-align:center" class="form-control" name="folio" id=folio disabled>
                     <br>
 
                     <label for="">FECHA DE ATENCIÓN</label>
+                    <!--Boton que habilita para buscar todos los reportes hechos de una fecha a otra -->
                     <input type="checkbox" name="chkfechas" id="chkfechas" >
                     
                     <div class="row">
                     <div class="col">
                     <label for="">FECHA 1</label>
-                    
+                    <!-- Campo fecha 1 -->
                     <br>
 
                     <input  disabled name="fecha1" id="fecha1" class="datepicker"  readonly="readonly" size="9" style="
@@ -103,6 +107,7 @@ include_once("librerias/control_usuario.php");
                     transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;"/>
                     </div><div class="col">
                     <label for="">FECHA 2</label>
+                    <!-- Campo fecha 2 -->
                     <input  name="fecha2" disabled id="fecha2" class="datepicker" readonly="readonly" size="9" style="text-align:center
                     display: block;
                     width: 100%;
@@ -129,7 +134,7 @@ include_once("librerias/control_usuario.php");
                     <div align="left">
                         <label>ÁREA</label>
                             <input type="checkbox" name="" id="chkarea" >
-                        
+                        <!-- Boton que nos habilita el campo de area -->
                     </div>
 <!-- Desplegable  Ciclo For DEPARTAMENTOS-->            
                     <?php
@@ -148,7 +153,7 @@ include_once("librerias/control_usuario.php");
                     
                     <label>PERSONAL</label>
                         <input type="checkbox" name="chkpersonal" id="chkpersonal" >
-                    
+                    <!-- Boton que nos habilita el personal -->
 
 <!-- Desplegable  Ciclo For QUIEN ATIENDE-->
                     <?php
@@ -168,14 +173,15 @@ include_once("librerias/control_usuario.php");
                             
                     <label for="">USUARIO</label>
                         <input type="checkbox" name="chkusuario" id="chkusuario" >
-                    
+                    <!-- boton que nos habilita los Usuarios -->
                     
                     <input name="usuario" id="usuario" disabled class="form-control" style="text-align:center">
                     <br>
                     <button class="btn btn-outline-primary" type="submit" name="buscar" id="buscar" onclick="validar();">BUSCAR</button>
-
+                    <!-- Boton para verificar que los campos estan llenos -->
                     <button class="btn btn-outline-primary" onclick="fecha1.value=''; event.preventDefault();">LIMPIAR FECHA 1</button>
                     <button class="btn btn-outline-primary" onclick="fecha2.value=''; event.preventDefault();">LIMPIAR FECHA 2</button>
+                    <!-- Botones para eliminar la fecha que se puso anteriormente -->
                 </div>
             </div>
         </form>
@@ -185,6 +191,7 @@ include_once("librerias/control_usuario.php");
 
     chkfolio.onclick = function(){
     	if (folio.disabled){
+            //Si Folio no esta habilitado que te permita marcar todos los campos
             folio.disabled = false
             area.disabled = true;
             chkarea.checked = false;
@@ -197,36 +204,44 @@ include_once("librerias/control_usuario.php");
             chkpersonal.checked = false;
 		}else{
             folio.disabled = true
-           
+           //De lo contrario Folio esta habilitado
 		}
     }
     chkarea.onclick = function(){
 		if (area.disabled && folio.disabled){
+            //Si el area esta habilitada y Folio no, que se el area se marque
 			area.disabled = false;
 		}else{
+            //De lo contrario Folio si esta habilitado, entonces no se habilita el area
 			area.disabled = true;
 		}
     }
     chkfechas.onclick = function(){
 		if (fecha1.disabled && fecha2.disabled && folio.disabled){
+            //Si se habilita las Fechas y Folio no esta Activado si se pueden usar
             fecha1.disabled = false;
             fecha2.disabled = false;
 		}else{
+            //De lo contrario Folio esta habilitado entonces no se pueden usar los campos
             fecha1.disabled = true;
             fecha2.disabled = true;
 		}
     }
     chkusuario.onclick = function(){
         if(usuario.disabled && folio.disabled){
+            //usuario esta habilitado y Folio no esta, se puede usar el campo
             usuario.disabled = false;
         }else{
+            //De lo contrario Folio esta habilitado y no se puede utilizar el campo
             usuario.disabled = true;
         }
     }
     chkpersonal.onclick = function(){
         if(personal.disabled && folio.disabled){
+            //personal esta habilitado y Folio no esta, se puede usar el campo
             personal.disabled = false;
         }else{
+            //De lo contrario folio esta habilitado y no se puede usar el campo
             personal.disabled = true;
         }
     }
@@ -234,16 +249,19 @@ include_once("librerias/control_usuario.php");
     
     function validar(){
         if(!folio.disabled & folio.value==""){
+        //El campo de se habilito y no se ingreso ningun folio
             alert("Folio esta vacio");
             event.preventDefault();
         }
         if(!fecha1.disabled & !fecha2.disabled){
+             //El campo de fechas se habilito y no se llenaron las 2 Fechas
             if(fecha1.value=="" | fecha2.value==""){
             alert("alguna fecha esta vacia");
             event.preventDefault();
         }
     }
         if(!usuario.disabled & usuario.value==""){
+            //El campo de usuario se habilito y no se escribio ningun nombre
             alert("Usuario esta vacio");
             event.preventDefault();
         }   
@@ -255,3 +273,5 @@ include_once("librerias/control_usuario.php");
 
 </body>
 </html>
+
+<!-- Creado por Brayan Prieto && Angel Vega 2018-2019 -->
