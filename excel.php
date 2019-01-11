@@ -1,4 +1,5 @@
 <?php
+
 //Libreiras para Base de Datos y Modificar cadena de caracteres
 require_once("librerias/info.php");
 
@@ -27,6 +28,7 @@ elseif($code==0){
     $filas=contarFilas($reportes);
 }
 //libreria para generar el Excel
+
 require_once('Classes/PHPExcel.php');
 
 $hoja = new PHPExcel();
@@ -116,14 +118,14 @@ if(isset($reportes)){
         
 }
 
+ob_end_clean(); 
+
 header("Content-Type: application/vnd.ms-excel");
 header("Content-Disposition: attachment;filename='INFORME.xlsx'");
 header('Cache-Control: max-age=0');
 
 $hoja = PHPExcel_IOFactory::createWriter($hoja, 'Excel2007');
 $hoja ->save('php://output');
-
+exit;
 ?>
-
-
-<!-- Creado por Brayan Prieto && Angel Vega 2018-2019 -->
+<!-- Creado por Brayan Prieto && Angel Vega -->
